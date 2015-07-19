@@ -12,6 +12,7 @@ import android.content.Intent;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import android.content.Context;
+import android.widget.TextView;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -69,25 +70,37 @@ public class HomeActivity extends ActionBarActivity {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setTitle(R.string.app_name);
+        String content = "";
 
         if (result != null) {
             String contents = result.getContents();
             if (contents != null) {
                 alertDialogBuilder.setMessage(result.toString());
+                content = result.getContents();
             } else {
                 alertDialogBuilder.setMessage("Don't result scanner");
             }
 
             alertDialogBuilder
                     .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface dialog, int id){
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }
                     });
 
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
+
+            TextView textView = (TextView)findViewById(R.id.txvBarcode);
+            textView.setText(content);
+
+
+//            TextView textView = new TextView(this);
+//            textView.setTextSize(40);
+//            textView.setText(content);
+//
+//            this.setContentView(textView);
 
         }
 
