@@ -4,5 +4,10 @@
     <item name="calvario1" type="color">#FEE902</item>
     <item name="calvario2" type="color">#F4BF01</item>
     <item name="calvario3" type="color">#E2AA00</item>
+    <item name="calvarioBlack" type="color">#000000</item>
+    <item name="calvarioWhite" type="color">#ffffff</item>
+    <item name="calvarioShadow" type="color">#D4D0C8</item>
+    <item name="calvarioDarkGray" type="color">#D4D0C8</item>
+    <item name="calvarioLightGray" type="color">#F5F5F5</item>
 
 </resources>
