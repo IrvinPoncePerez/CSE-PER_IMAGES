@@ -11,6 +11,12 @@ public class HomeActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayUseLogoEnabled(true); //Sirve
+        getSupportActionBar().setDisplayShowHomeEnabled(true); //Sirve
+        getSupportActionBar().setIcon(R.mipmap.calvario_logo); //Sirve
+
+        setTitle("El Calvario");
+
         setContentView(R.layout.activity_home);
     }
 

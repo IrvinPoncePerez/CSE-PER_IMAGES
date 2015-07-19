@@ -1,8 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- the theme applied to the application or activity -->
+    <style name="CustomActionBarTheme"
+        parent="@style/Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/CalvarioStyle</item>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/CalvarioStyle</item>
     </style>
 
+    <!-- ActionBar styles -->
+    <style name="CalvarioStyle"
+        parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/calvario1</item>
+
+
+        <!-- Support library compatibility -->
+        <item name="background">@color/calvario1</item>
+
+
+
+    </style>
 </resources>
