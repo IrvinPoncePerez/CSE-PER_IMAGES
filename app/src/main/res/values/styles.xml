@@ -25,8 +25,4 @@
         <item name="android:textColor">@color/calvarioBlack</item>
     </style>
 
-    <style name="EditTextStyle">
-
-    </style>
-
 </resources>

@@ -24,18 +24,17 @@
 
     <ImageButton
         android:id="@+id/btnSearch"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:background="@drawable/round_button"
         android:src="@drawable/search"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
         android:layout_centerInParent="true"
-
         android:onClick="btnSearch_onClick"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:padding="10dp" />
+        android:adjustViewBounds="true" />
+        <!--android:scaleType="fitCenter"-->
+        <!--android:padding="10dp" />-->
 
         <!--android:layout_marginBottom="5dp"-->
         <!--android:layout_marginLeft="2dp"-->

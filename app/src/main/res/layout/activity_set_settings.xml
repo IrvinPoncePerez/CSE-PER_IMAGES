@@ -11,7 +11,8 @@
         android:text="@string/server_Address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/TextViewStyle" />
+        android:theme="@style/TextViewStyle"
+        android:layout_marginTop="7dp" />
 
     <EditText
         android:id="@+id/txtServerAddres"
@@ -20,7 +21,10 @@
         android:layout_below="@+id/lblServerAddress"
         android:inputType="number"
         android:digits="1234567890."
-        android:hint="192.168.0.100"/>
+        android:hint="192.168.0.100"
+        android:textAlignment="center"
+        android:background="@drawable/edit_text"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/lblPortNumber"
@@ -28,7 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextViewStyle"
-        android:layout_below="@+id/txtServerAddres" />
+        android:layout_below="@+id/txtServerAddres"
+        android:layout_marginTop="7dp" />
 
     <EditText
         android:id="@+id/txtPortNumber"
@@ -38,7 +43,10 @@
         android:inputType="number"
         android:maxLength="4"
         android:digits="1234567890"
-        android:hint="8080" />
+        android:hint="8080"
+        android:textAlignment="center"
+        android:background="@drawable/edit_text"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/lblInstanceName"
@@ -46,7 +54,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextViewStyle"
-        android:layout_below="@+id/txtPortNumber"/>
+        android:layout_below="@+id/txtPortNumber"
+        android:layout_marginTop="7dp" />
 
     <EditText
         android:id="@+id/txtInstanceName"
@@ -55,7 +64,10 @@
         android:layout_below="@+id/lblInstanceName"
         android:inputType="text"
         android:hint="TEST"
-        android:capitalize="characters"/>
+        android:capitalize="characters"
+        android:textAlignment="center"
+        android:background="@drawable/edit_text"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/lblUsername"
@@ -63,7 +75,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextViewStyle"
-        android:layout_below="@+id/txtInstanceName"/>
+        android:layout_below="@+id/txtInstanceName"
+        android:layout_marginTop="7dp" />
 
     <EditText
         android:id="@+id/txtUserName"
@@ -71,7 +84,10 @@
         android:layout_height="35dp"
         android:layout_below="@+id/lblUsername"
         android:capitalize="characters"
-        android:hint="CJHONSON"/>
+        android:hint="CJHONSON"
+        android:textAlignment="center"
+        android:background="@drawable/edit_text"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/lblPassword"
@@ -79,7 +95,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextViewStyle"
-        android:layout_below="@+id/txtUserName"/>
+        android:layout_below="@+id/txtUserName"
+        android:layout_marginTop="7dp" />
 
     <EditText
         android:id="@+id/txtPassword"
@@ -87,7 +104,20 @@
         android:layout_height="35dp"
         android:layout_below="@+id/lblPassword"
         android:inputType="textPassword"
-        android:hint="blablabla"/>
+        android:hint="blablabla"
+        android:textAlignment="center"
+        android:background="@drawable/edit_text"
+        android:gravity="center" />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/btnSaveSettings"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:background="@drawable/round_button"
+        android:src="@drawable/save"/>
 
 
 </RelativeLayout>

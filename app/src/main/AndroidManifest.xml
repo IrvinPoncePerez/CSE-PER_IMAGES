@@ -22,7 +22,8 @@
         <activity
             android:name=".ShowResultActivity"
             android:label="@string/title_barcode"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.irvin.integrate_zxing.HomeActivity" />
@@ -30,7 +31,8 @@
         <activity
             android:name=".SetSettingsActivity"
             android:label="Settings"
-            android:parentActivityName=".HomeActivity" >
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.irvin.integrate_zxing.HomeActivity" />
