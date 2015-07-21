@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.example.irvin.integrate_zxing.SetSettingsActivity">
+
+    <TextView
+        android:id="@+id/lblServerAddress"
+        android:text="@string/server_Address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/TextViewStyle" />
+
+    <EditText
+        android:id="@+id/txtServerAddres"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/lblServerAddress"
+        android:inputType="number"
+        android:digits="1234567890."
+        android:hint="192.168.0.100"/>
+
+    <TextView
+        android:id="@+id/lblPortNumber"
+        android:text="@string/port_Number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/TextViewStyle"
+        android:layout_below="@+id/txtServerAddres" />
+
+    <EditText
+        android:id="@+id/txtPortNumber"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/lblPortNumber"
+        android:inputType="number"
+        android:maxLength="4"
+        android:digits="1234567890"
+        android:hint="8080" />
+
+    <TextView
+        android:id="@+id/lblInstanceName"
+        android:text="@string/instance_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/TextViewStyle"
+        android:layout_below="@+id/txtPortNumber"/>
+
+    <EditText
+        android:id="@+id/txtInstanceName"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/lblInstanceName"
+        android:inputType="text"
+        android:hint="TEST"
+        android:capitalize="characters"/>
+
+    <TextView
+        android:id="@+id/lblUsername"
+        android:text="@string/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/TextViewStyle"
+        android:layout_below="@+id/txtInstanceName"/>
+
+    <EditText
+        android:id="@+id/txtUserName"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/lblUsername"
+        android:capitalize="characters"
+        android:hint="CJHONSON"/>
+
+    <TextView
+        android:id="@+id/lblPassword"
+        android:text="@string/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/TextViewStyle"
+        android:layout_below="@+id/txtUserName"/>
+
+    <EditText
+        android:id="@+id/txtPassword"
+        android:layout_width="fill_parent"
+        android:layout_height="35dp"
+        android:layout_below="@+id/lblPassword"
+        android:inputType="textPassword"
+        android:hint="blablabla"/>
+
+
+</RelativeLayout>

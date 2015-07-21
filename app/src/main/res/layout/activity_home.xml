@@ -9,7 +9,7 @@
     tools:context=".HomeActivity" >
     
     <EditText
-        android:id="@+id/txvBarcode"
+        android:id="@+id/txtBarcodeResult"
         android:layout_width="fill_parent"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -23,7 +23,7 @@
         android:hint="@string/text_hint"/>
 
     <ImageButton
-        android:id="@+id/btnScan"
+        android:id="@+id/btnSearch"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:background="@drawable/round_button"
@@ -32,7 +32,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_centerInParent="true"
 
-        android:onClick="btnScan_onClick"
+        android:onClick="btnSearch_onClick"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:padding="10dp" />

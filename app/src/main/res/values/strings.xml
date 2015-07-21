@@ -3,7 +3,15 @@
     <string name="action_settings">Settings</string>
     <string name="action_scanner">Scanner</string>
     <string name="home_label">El Calvario</string>
-    <string name="result_succeeded"></string>
     <string name="text_hint"><font size="30">Barcode Here</font></string>
     <string name="barcode_content">No CODE!</string>
+    <string name="title_activity_show_result">ShowResultActivity</string>
+    <string name="title_barcode">000</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_set_settings">SetSettingsActivity</string>
+    <string name="server_Address">Server Address</string>
+    <string name="port_Number">Port Number</string>
+    <string name="instance_name">Instance Name</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
 </resources>
