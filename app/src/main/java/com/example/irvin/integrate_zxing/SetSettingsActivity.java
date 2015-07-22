@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.EditText;
 import com.example.irvin.integrate_zxing.DatabaseHandler.SETTING;
 
-//import java.sql.Connection;
-//import java.sql.DriverManager;
-//import java.sql.ResultSet;
-//import java.sql.SQLException;
-//import java.sql.Statement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SetSettingsActivity extends ActionBarActivity {
 
@@ -67,8 +67,9 @@ public class SetSettingsActivity extends ActionBarActivity {
         }
 
 
-
-        this.fileList();
+        if (testConnection()) {
+            this.finish();
+        }
     }
 
     private void getSettings(){
@@ -92,40 +93,40 @@ public class SetSettingsActivity extends ActionBarActivity {
         }
     }
 
-//    private Boolean testConnection(){
+    private Boolean testConnection(){
 
-//        Connection connection = null;
-//        Statement statement = null;
-//        ResultSet resultSet = null;
-//
-//        try {
-//            Class.forName("oracle.jdbc.driver.OracleDrive");
-//            String url = "jdbc:oracle:thin:@" + db.getSetting(SETTING.SERVER_ADDRESS) +
-//                    ":" + db.getSetting(SETTING.PORT_NUMBER) +
-//                    ":" + db.getSetting(SETTING.INSTANCE_NAME);
-//
-//            Log.d("URL", url);
-//
-//            connection = DriverManager.getConnection(url,
-//                    db.getSetting(SETTING.USERNAME),
-//                    db.getSetting(SETTING.PASSWORD));
-//
-//            connection = DriverManager.getConnection(url);
-//
-//            statement = connection.createStatement();
-//            resultSet = statement.executeQuery("SELECT DESC_CONNECTION FROM TEST_CONNECTION");
-//
-//            Log.d("ON_TEST_CONNECTION", "on test connection");
-//            while (resultSet.next()){
-//                Log.d("RESULT_TEST_CONNECTION", resultSet.getString(0));
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            Log.d("CLASSNOTFOUNDEXCEPTION", ex.getMessage());
-//            return false;
-//        } catch (SQLException ex) {
-//            Log.d("SQLEXCEPTION", ex.getMessage());
-//            return false;
-//        }
-//        return true;
-//    }
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            String url = "jdbc:oracle:thin:@" + db.getSetting(SETTING.SERVER_ADDRESS) +
+                    ":" + db.getSetting(SETTING.PORT_NUMBER) +
+                    ":" + db.getSetting(SETTING.INSTANCE_NAME);
+
+            Log.d("URL", url);
+
+            connection = DriverManager.getConnection(url,
+                    db.getSetting(SETTING.USERNAME),
+                    db.getSetting(SETTING.PASSWORD));
+
+            connection = DriverManager.getConnection(url);
+
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT DESC_CONNECTION FROM TEST_CONNECTION");
+
+            Log.d("ON_TEST_CONNECTION", "on test connection");
+            while (resultSet.next()){
+                Log.d("RESULT_TEST_CONNECTION", resultSet.getString(0));
+            }
+        } catch (ClassNotFoundException ex) {
+            Log.d("CLASSNOTFOUNDEXCEPTION", ex.getMessage());
+            return false;
+        } catch (SQLException ex) {
+            Log.d("SQLEXCEPTION", ex.getMessage());
+            return false;
+        }
+        return true;
+    }
 }

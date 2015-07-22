@@ -47,13 +47,13 @@ public class HomeActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//
-//            Intent intent = new Intent(this, SetSettingsActivity.class);
-//            startActivity(intent);
-//
-//        } else if (id == R.id.action_scanner) {
-        if (id == R.id.action_scanner){
+        if (id == R.id.action_settings) {
+
+            Intent intent = new Intent(this, SetSettingsActivity.class);
+            startActivity(intent);
+
+        } else if (id == R.id.action_scanner) {
+//        if (id == R.id.action_scanner){
             IntentIntegrator integrator = new IntentIntegrator(HomeActivity.this);
             integrator.addExtra("SCAN_WIDTH", 600);
             integrator.addExtra("SCAN_HEIGHT", 400);
