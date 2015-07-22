@@ -52,15 +52,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.execSQL(CREATE_SETTING_TABLE);
 
         addSetting(db, SETTING.SERVER_ADDRESS, "");
-        Log.d("INSERT", SETTING.SERVER_ADDRESS.toString() + " null");
         addSetting(db, SETTING.PORT_NUMBER, "");
-        Log.d("INSERT", SETTING.PORT_NUMBER.toString() + " null");
         addSetting(db, SETTING.INSTANCE_NAME, "");
-        Log.d("INSERT", SETTING.INSTANCE_NAME.toString() + " null");
         addSetting(db, SETTING.USERNAME, "");
-        Log.d("INSERT", SETTING.USERNAME.toString() + " null");
         addSetting(db, SETTING.PASSWORD, "");
-        Log.d("INSERT", SETTING.PASSWORD.toString() + " null");
     }
 
     @Override
@@ -70,7 +65,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     }
 
     private void addSetting(SQLiteDatabase db, SETTING setting, String value){
-        Log.d("ADD_SETTINGS", "adding setting");
         ContentValues values = new ContentValues();
         values.put(KEY_DESCRIPTION, setting.toString());
         values.put(KEY_VALUE, value);
@@ -87,7 +81,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                                  null,
                                  null,
                                  null);
-//        Log.d("GET_SETTINGS", cursor.getCount() + "," + cursor.getColumnCount());
 
         String value = "";
 
