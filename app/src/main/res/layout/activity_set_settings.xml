@@ -24,7 +24,8 @@
         android:hint="192.168.0.100"
         android:textAlignment="center"
         android:background="@drawable/edit_text"
-        android:gravity="center" />
+        android:gravity="center"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/lblPortNumber"
@@ -46,7 +47,8 @@
         android:hint="8080"
         android:textAlignment="center"
         android:background="@drawable/edit_text"
-        android:gravity="center" />
+        android:gravity="center"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/lblInstanceName"
@@ -62,12 +64,13 @@
         android:layout_width="fill_parent"
         android:layout_height="35dp"
         android:layout_below="@+id/lblInstanceName"
-        android:inputType="text"
+        android:inputType="textCapCharacters|text|textCapWords"
         android:hint="TEST"
         android:capitalize="characters"
         android:textAlignment="center"
         android:background="@drawable/edit_text"
-        android:gravity="center" />
+        android:gravity="center"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/lblUsername"
@@ -87,7 +90,9 @@
         android:hint="CJHONSON"
         android:textAlignment="center"
         android:background="@drawable/edit_text"
-        android:gravity="center" />
+        android:gravity="center"
+        android:singleLine="true"
+        android:inputType="textCapCharacters|textCapWords" />
 
     <TextView
         android:id="@+id/lblPassword"
@@ -107,7 +112,8 @@
         android:hint="blablabla"
         android:textAlignment="center"
         android:background="@drawable/edit_text"
-        android:gravity="center" />
+        android:gravity="center"
+        android:singleLine="true" />
 
     <ImageButton
         android:layout_width="70dp"
@@ -117,6 +123,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_centerInParent="true"
         android:background="@drawable/round_button"
+        android:onClick="btnSaveSetting_onClick"
         android:src="@drawable/save"/>
 
 

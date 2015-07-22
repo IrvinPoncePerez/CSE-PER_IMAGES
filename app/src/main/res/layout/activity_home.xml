@@ -20,7 +20,8 @@
         android:inputType="number"
         android:maxLength="6"
         android:background="@drawable/edit_text"
-        android:hint="@string/text_hint"/>
+        android:hint="@string/text_hint"
+        android:digits="1234567890" />
 
     <ImageButton
         android:id="@+id/btnSearch"
