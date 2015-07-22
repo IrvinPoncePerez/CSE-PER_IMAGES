@@ -9,7 +9,11 @@ import android.view.View;
 import android.widget.EditText;
 import com.example.irvin.integrate_zxing.DatabaseHandler.SETTING;
 
-import java.util.logging.Logger;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class SetSettingsActivity extends ActionBarActivity {
@@ -21,11 +25,11 @@ public class SetSettingsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_settings);
 
-        EditText txtServerAddres = (EditText)findViewById(R.id.txtServerAddres);
-        EditText txtPortNumber =(EditText)findViewById(R.id.txtPortNumber);
-        EditText txtInstanceName =(EditText)findViewById(R.id.txtInstanceName);
-        EditText txtUserName =(EditText)findViewById(R.id.txtUserName);
-        EditText txtPassword =(EditText)findViewById(R.id.txtPassword);
+        EditText txtServerAddres = (EditText) findViewById(R.id.txtServerAddres);
+        EditText txtPortNumber = (EditText) findViewById(R.id.txtPortNumber);
+        EditText txtInstanceName = (EditText) findViewById(R.id.txtInstanceName);
+        EditText txtUserName = (EditText) findViewById(R.id.txtUserName);
+        EditText txtPassword = (EditText) findViewById(R.id.txtPassword);
 
 
         try {
@@ -37,8 +41,8 @@ public class SetSettingsActivity extends ActionBarActivity {
             txtUserName.setText(db.getSetting(SETTING.USERNAME));
             txtPassword.setText(db.getSetting(SETTING.PASSWORD));
 
-        } catch (Exception ex){
-            Log.d("ERROR ON_CREATE",ex.getMessage());
+        } catch (Exception ex) {
+            Log.d("ERROR ON_CREATE", ex.getMessage());
         }
 
     }
@@ -65,15 +69,15 @@ public class SetSettingsActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void btnSaveSetting_onClick(View view){
+    public void btnSaveSetting_onClick(View view) {
 
         Log.d("ON_CLICK", "btnSaveSetting_onClick");
 
-        EditText txtServerAddres = (EditText)findViewById(R.id.txtServerAddres);
-        EditText txtPortNumber =(EditText)findViewById(R.id.txtPortNumber);
-        EditText txtInstanceName =(EditText)findViewById(R.id.txtInstanceName);
-        EditText txtUserName =(EditText)findViewById(R.id.txtUserName);
-        EditText txtPassword =(EditText)findViewById(R.id.txtPassword);
+        EditText txtServerAddres = (EditText) findViewById(R.id.txtServerAddres);
+        EditText txtPortNumber = (EditText) findViewById(R.id.txtPortNumber);
+        EditText txtInstanceName = (EditText) findViewById(R.id.txtInstanceName);
+        EditText txtUserName = (EditText) findViewById(R.id.txtUserName);
+        EditText txtPassword = (EditText) findViewById(R.id.txtPassword);
 
         Integer result;
 
@@ -88,10 +92,28 @@ public class SetSettingsActivity extends ActionBarActivity {
             Log.d("UPDATING_USERNAME", result.toString());
             result = db.updateSettings(SETTING.PASSWORD, txtPassword.getText().toString());
             Log.d("UPDATING_PASSWORD", result.toString());
-        } catch (Exception ex){
+        } catch (Exception ex) {
             Log.d("ERROR_ON_SAVE", ex.getMessage());
         }
 
-        this.finish();
+        Connection connection;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            String url = "jdbc:oracle:thin:@" + txtServerAddres.getText().toString() +
+                    ":" + txtPortNumber.getText().toString() +
+                    ":" + txtInstanceName.getText().toString();
+
+            Log.d("URL", url);
+
+            connection = DriverManager.getConnection(url, txtUserName.getText().toString(), txtPassword.getText().toString());
+
+
+        } catch (ClassNotFoundException ex) {
+            Log.d("CLASSNOTFOUNDEXCEPTION", ex.getMessage());
+        } catch (SQLException ex) {
+            Log.d("SQLEXCEPTION", ex.getMessage());
+        }
+
+
     }
 }

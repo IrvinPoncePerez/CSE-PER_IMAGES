@@ -13,7 +13,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import android.content.Context;
 import android.widget.EditText;
-import android.widget.TextView;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -30,6 +29,7 @@ public class HomeActivity extends ActionBarActivity {
         setTitle("El Calvario");
 
         setContentView(R.layout.activity_home);
+
     }
 
     @Override
