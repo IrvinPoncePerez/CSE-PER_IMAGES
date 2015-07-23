@@ -1,5 +1,9 @@
 package com.example.irvin.integrate_zxing;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,17 +11,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.example.irvin.integrate_zxing.DatabaseHandler.SETTING;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
+
 
 public class SetSettingsActivity extends ActionBarActivity {
 
     DatabaseHandler db;
+    String resultConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,81 +67,137 @@ public class SetSettingsActivity extends ActionBarActivity {
 
         EditText txtServerAddres = (EditText) findViewById(R.id.txtServerAddres);
         EditText txtPortNumber = (EditText) findViewById(R.id.txtPortNumber);
-        EditText txtInstanceName = (EditText) findViewById(R.id.txtInstanceName);
-        EditText txtUserName = (EditText) findViewById(R.id.txtUserName);
-        EditText txtPassword = (EditText) findViewById(R.id.txtPassword);
+        EditText txtInstanceName = (EditText) findViewById(R.id.txtServerServlet);
 
         try {
             db.updateSettings(SETTING.SERVER_ADDRESS, txtServerAddres.getText().toString());
             db.updateSettings(SETTING.PORT_NUMBER, txtPortNumber.getText().toString());
-            db.updateSettings(SETTING.INSTANCE_NAME, txtInstanceName.getText().toString());
-            db.updateSettings(SETTING.USERNAME, txtUserName.getText().toString());
-            db.updateSettings(SETTING.PASSWORD, txtPassword.getText().toString());
+            db.updateSettings(SETTING.SERVER_SERVLET, txtInstanceName.getText().toString());
+
         } catch (Exception ex) {
             Log.d("ERROR_ON_SAVE", ex.getMessage());
         }
 
+        if (testConnection() == true) {
 
-        if (testConnection()) {
+            //Log.d("RESULT", resultConnection);
+
+            Intent intentBack = new Intent();
+            intentBack.putExtra("RESULT_CONNECTION", resultConnection);
+            setResult(Activity.RESULT_OK,intentBack);
+
             this.finish();
         }
+
     }
 
     private void getSettings(){
-        EditText txtServerAddres = ((EditText) findViewById(R.id.txtServerAddres));
-        EditText txtPortNumber = (EditText) findViewById(R.id.txtPortNumber);
-        EditText txtInstanceName = (EditText) findViewById(R.id.txtInstanceName);
-        EditText txtUserName = (EditText) findViewById(R.id.txtUserName);
-        EditText txtPassword = (EditText) findViewById(R.id.txtPassword);
 
         try {
             db = new DatabaseHandler(this);
 
             ((EditText) findViewById(R.id.txtServerAddres)).setText(db.getSetting(SETTING.SERVER_ADDRESS));
             ((EditText) findViewById(R.id.txtPortNumber)).setText(db.getSetting(SETTING.PORT_NUMBER));
-            ((EditText) findViewById(R.id.txtInstanceName)).setText(db.getSetting(SETTING.INSTANCE_NAME));
-            ((EditText) findViewById(R.id.txtUserName)).setText(db.getSetting(SETTING.USERNAME));
-            ((EditText) findViewById(R.id.txtPassword)).setText(db.getSetting(SETTING.PASSWORD));
+            ((EditText) findViewById(R.id.txtServerServlet)).setText(db.getSetting(SETTING.SERVER_SERVLET));
 
         } catch (Exception ex) {
             Log.d("ERROR ON_CREATE", ex.getMessage());
         }
     }
 
-    private Boolean testConnection(){
+    private boolean testConnection(){
 
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
+        Boolean value;
+        String stringURL = "http://" + db.getSetting(SETTING.SERVER_ADDRESS) +
+                     ":" + db.getSetting(SETTING.PORT_NUMBER) +
+                     "/" + db.getSetting(SETTING.SERVER_SERVLET) +
+                     "/TestConnectionServlet";
+
+        Log.d("STRING_URL", stringURL);
 
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            String url = "jdbc:oracle:thin:@" + db.getSetting(SETTING.SERVER_ADDRESS) +
-                    ":" + db.getSetting(SETTING.PORT_NUMBER) +
-                    ":" + db.getSetting(SETTING.INSTANCE_NAME);
-
-            Log.d("URL", url);
-
-            connection = DriverManager.getConnection(url,
-                    db.getSetting(SETTING.USERNAME),
-                    db.getSetting(SETTING.PASSWORD));
-
-            connection = DriverManager.getConnection(url);
-
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT DESC_CONNECTION FROM TEST_CONNECTION");
-
-            Log.d("ON_TEST_CONNECTION", "on test connection");
-            while (resultSet.next()){
-                Log.d("RESULT_TEST_CONNECTION", resultSet.getString(0));
-            }
-        } catch (ClassNotFoundException ex) {
-            Log.d("CLASSNOTFOUNDEXCEPTION", ex.getMessage());
-            return false;
-        } catch (SQLException ex) {
-            Log.d("SQLEXCEPTION", ex.getMessage());
-            return false;
+            value = (new DoTestConnection().execute(stringURL).get());
+        } catch (InterruptedException e) {
+            Log.d("InterruptedException", e.getMessage());
+            value = false;
+        } catch (ExecutionException e) {
+            Log.d("ExecutionException", e.getMessage());
+            value = false;
         }
-        return true;
+        Log.d("VALUE", value.toString());
+
+        return value;
     }
+
+    private class DoTestConnection extends AsyncTask<String, Integer, Boolean>{
+
+//        ProgressDialog mProgressDialog;
+
+//        @Override
+//        protected void onPreExecute(){
+//            super.onPreExecute();
+//
+//            mProgressDialog = new ProgressDialog(SetSettingsActivity.this);
+//            mProgressDialog.setTitle("Setting Connection");
+//            mProgressDialog.setMessage("Connecting...");
+//            mProgressDialog.setIndeterminate(false);
+//            mProgressDialog.show();
+//        }
+
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            URL url = null;
+            HttpURLConnection urlConnection = null;
+
+            try {
+                url = new URL(params[0]);
+            } catch (MalformedURLException e) {
+                Log.d("MalformedURLException", e.getMessage());
+                return false;
+            }
+
+            try {
+                urlConnection = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                Log.d("IOException", e.getMessage());
+                urlConnection.disconnect();
+                return false;
+            } catch (Exception ex){
+                Log.d("Exception", ex.getMessage());
+                urlConnection.disconnect();
+                return false;
+            }
+
+            InputStream inputStream = null;
+            try {
+                inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder builder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null){
+                    Log.d("LINE", line);
+                    builder.append(line);
+                }
+
+                try {
+                    JSONObject jsonObject = new JSONObject(builder.toString());
+                    resultConnection = jsonObject.getString("status");
+                } catch (JSONException e) {
+                    Log.d("JSONException", e.getMessage());
+                }
+
+
+            } catch (IOException e) {
+                Log.d("GET_INPUT_STREAM", e.getMessage());
+                urlConnection.disconnect();
+                return false;
+            } finally {
+                urlConnection.disconnect();
+            }
+
+            return true;
+        }
+    }
+
 }

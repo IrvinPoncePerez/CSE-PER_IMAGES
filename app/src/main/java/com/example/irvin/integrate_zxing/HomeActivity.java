@@ -1,9 +1,11 @@
 package com.example.irvin.integrate_zxing;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,10 +15,12 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import android.content.Context;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class HomeActivity extends ActionBarActivity {
 
+    private static final int STATIC_INTEGER_VALUE = 1;
     final Context context = this;
 
     @Override
@@ -50,7 +54,7 @@ public class HomeActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
 
             Intent intent = new Intent(this, SetSettingsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, STATIC_INTEGER_VALUE);
 
         } else if (id == R.id.action_scanner) {
 //        if (id == R.id.action_scanner){
@@ -73,43 +77,55 @@ public class HomeActivity extends ActionBarActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setTitle(R.string.app_name);
-        String content = "";
+        Log.d("requestCode", String.valueOf(requestCode));
+        Log.d("resultCode", String.valueOf(resultCode));
+        Log.d("intent", intent.toString());
 
-        if (result != null) {
-            String contents = result.getContents();
-            if (contents != null) {
-//                alertDialogBuilder.setMessage(result.toString());
-                content = result.getContents();
+        switch (requestCode){
+            case (STATIC_INTEGER_VALUE):{
+                if(resultCode == Activity.RESULT_OK){
+                    String str = intent.getStringExtra("RESULT_CONNECTION");
+                    Log.d("RESULT_CONNECTION", str);
 
-            } else {
-
-                alertDialogBuilder.setMessage("Don't result scanner");
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-
+                    Toast.makeText(this.getBaseContext(), str, Toast.LENGTH_SHORT).show();
+                }
+                break;
             }
+            default: {
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
-            EditText editText = (EditText)findViewById(R.id.txtBarcodeResult);
-            editText.setText(content);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setTitle(R.string.app_name);
+                String content = "0";
 
-//            TextView textView = new TextView(this);
-//            textView.setTextSize(40);
-//            textView.setText(content);
-//
-//            this.setContentView(textView);
+                if (result != null) {
+                    String contents = result.getContents();
+                    if (contents != null) {
+                        //                alertDialogBuilder.setMessage(result.toString());
+                        content = result.getContents();
 
+                    } else {
+
+                        alertDialogBuilder.setMessage("Don't result scanner");
+                        alertDialogBuilder
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+
+                    }
+
+                    EditText editText = (EditText) findViewById(R.id.txtBarcodeResult);
+                    content = String.valueOf(Integer.parseInt(content));
+                    editText.setText(content);
+                }
+            }
         }
 
     }

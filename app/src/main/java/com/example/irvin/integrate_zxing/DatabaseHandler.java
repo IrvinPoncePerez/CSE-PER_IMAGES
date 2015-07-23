@@ -13,7 +13,7 @@ import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "SETTINGS_MANAGER";
     private static final String TABLE_SETTINGS = "SETTINGS";
     private static final String KEY_DESCRIPTION = "DESCRIPTION";
@@ -22,9 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public static enum SETTING{
         SERVER_ADDRESS("SERVER_ADDRES", 0),
         PORT_NUMBER("PORT_NUMBER", 1),
-        INSTANCE_NAME("INSTANCE_NAME", 2),
-        USERNAME("USERNAME", 3),
-        PASSWORD("PASWORD", 4);
+        SERVER_SERVLET("SERVER_SERVLET", 2);
 
         private String stringValue;
         private int intValue;
@@ -53,9 +51,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         addSetting(db, SETTING.SERVER_ADDRESS, "");
         addSetting(db, SETTING.PORT_NUMBER, "");
-        addSetting(db, SETTING.INSTANCE_NAME, "");
-        addSetting(db, SETTING.USERNAME, "");
-        addSetting(db, SETTING.PASSWORD, "");
+        addSetting(db, SETTING.SERVER_SERVLET, "");
     }
 
     @Override

@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextViewStyle"
-        android:layout_marginTop="7dp" />
+        android:layout_marginTop="7dp"
+        android:paddingTop="20dp" />
 
     <EditText
         android:id="@+id/txtServerAddres"
@@ -34,7 +35,8 @@
         android:layout_height="wrap_content"
         android:theme="@style/TextViewStyle"
         android:layout_below="@+id/txtServerAddres"
-        android:layout_marginTop="7dp" />
+        android:layout_marginTop="7dp"
+        android:paddingTop="20dp" />
 
     <EditText
         android:id="@+id/txtPortNumber"
@@ -51,65 +53,23 @@
         android:singleLine="true" />
 
     <TextView
-        android:id="@+id/lblInstanceName"
-        android:text="@string/instance_name"
+        android:id="@+id/lblServerServlet"
+        android:text="@string/servlet_server"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:theme="@style/TextViewStyle"
         android:layout_below="@+id/txtPortNumber"
-        android:layout_marginTop="7dp" />
+        android:layout_marginTop="7dp"
+        android:paddingTop="20dp" />
 
     <EditText
-        android:id="@+id/txtInstanceName"
+        android:id="@+id/txtServerServlet"
         android:layout_width="fill_parent"
         android:layout_height="35dp"
-        android:layout_below="@+id/lblInstanceName"
-        android:inputType="textCapCharacters|text|textCapWords"
+        android:layout_below="@+id/lblServerServlet"
+        android:inputType="text|textPassword"
         android:hint="TEST"
         android:capitalize="characters"
-        android:textAlignment="center"
-        android:background="@drawable/edit_text"
-        android:gravity="center"
-        android:singleLine="true" />
-
-    <TextView
-        android:id="@+id/lblUsername"
-        android:text="@string/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:theme="@style/TextViewStyle"
-        android:layout_below="@+id/txtInstanceName"
-        android:layout_marginTop="7dp" />
-
-    <EditText
-        android:id="@+id/txtUserName"
-        android:layout_width="fill_parent"
-        android:layout_height="35dp"
-        android:layout_below="@+id/lblUsername"
-        android:capitalize="characters"
-        android:hint="CJHONSON"
-        android:textAlignment="center"
-        android:background="@drawable/edit_text"
-        android:gravity="center"
-        android:singleLine="true"
-        android:inputType="textCapCharacters|textCapWords" />
-
-    <TextView
-        android:id="@+id/lblPassword"
-        android:text="@string/password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:theme="@style/TextViewStyle"
-        android:layout_below="@+id/txtUserName"
-        android:layout_marginTop="7dp" />
-
-    <EditText
-        android:id="@+id/txtPassword"
-        android:layout_width="fill_parent"
-        android:layout_height="35dp"
-        android:layout_below="@+id/lblPassword"
-        android:inputType="textPassword"
-        android:hint="blablabla"
         android:textAlignment="center"
         android:background="@drawable/edit_text"
         android:gravity="center"
