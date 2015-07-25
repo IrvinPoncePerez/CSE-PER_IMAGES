@@ -1,10 +1,11 @@
 package com.example.irvin.integrate_zxing;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.widget.TextView;
 
 public class ShowResultActivity extends ActionBarActivity {
 
@@ -12,6 +13,18 @@ public class ShowResultActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_result);
+
+        Intent intent = this.getIntent();
+
+        TextView lblEmployeeName = (TextView)findViewById(R.id.lblEmployeeName);
+        TextView lblEmployeeDepto = (TextView)findViewById(R.id.lblEmployeeDepto);
+        TextView lblEmployeeJob = (TextView)findViewById(R.id.lblEmployeeJob);
+
+        this.setTitle(intent.getStringExtra("EMPLOYEE_NUMBER"));
+        lblEmployeeName.setText(intent.getStringExtra("EMPLOYEE_NAME"));
+        lblEmployeeDepto.setText(intent.getStringExtra("DEPARTMENT"));
+        lblEmployeeJob.setText(intent.getStringExtra("JOB"));
+
     }
 
     @Override
@@ -35,4 +48,5 @@ public class ShowResultActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }

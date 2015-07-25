@@ -1,8 +1,8 @@
 <resources>
 
     <item name="calvario0" type="color">#FBE900</item>
-    <!--<item name="calvario1" type="color">#FEE902</item>-->
-    <item name="calvario1" type="color">#D4D0C8</item>
+    <item name="calvario1" type="color">#FEE902</item>
+    <!--<item name="calvario1" type="color">#D4D0C8</item>-->
     <item name="calvario2" type="color">#F4BF01</item>
     <item name="calvario3" type="color">#E2AA00</item>
     <item name="calvarioBlack" type="color">#000000</item>

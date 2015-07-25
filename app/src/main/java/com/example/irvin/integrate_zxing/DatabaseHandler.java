@@ -9,7 +9,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper{
 
@@ -19,7 +18,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_DESCRIPTION = "DESCRIPTION";
     private static final String KEY_VALUE = "VALUE";
 
-    public static enum SETTING{
+    public enum SETTING{
         SERVER_ADDRESS("SERVER_ADDRES", 0),
         PORT_NUMBER("PORT_NUMBER", 1),
         SERVER_SERVLET("SERVER_SERVLET", 2);
@@ -27,7 +26,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         private String stringValue;
         private int intValue;
 
-        private SETTING(String toString, int value){
+        SETTING(String toString, int value){
             stringValue = toString;
             intValue = value;
         }

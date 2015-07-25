@@ -21,7 +21,9 @@
         android:maxLength="6"
         android:background="@drawable/edit_text"
         android:hint="@string/text_hint"
-        android:digits="1234567890" />
+        android:digits="1234567890"
+        android:singleLine="true"
+        android:textAlignment="center" />
 
     <ImageButton
         android:id="@+id/btnSearch"

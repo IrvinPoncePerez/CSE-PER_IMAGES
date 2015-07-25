@@ -1,6 +1,7 @@
 package com.example.irvin.integrate_zxing;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
@@ -78,8 +79,6 @@ public class SetSettingsActivity extends ActionBarActivity {
 
         if (testConnection() == true) {
 
-            //Log.d("RESULT", resultConnection);
-
             Intent intentBack = new Intent();
             intentBack.putExtra("RESULT_CONNECTION", resultConnection);
             setResult(Activity.RESULT_OK,intentBack);
@@ -111,8 +110,6 @@ public class SetSettingsActivity extends ActionBarActivity {
                      "/" + db.getSetting(SETTING.SERVER_SERVLET) +
                      "/TestConnectionServlet";
 
-        Log.d("STRING_URL", stringURL);
-
         try {
             value = (new DoTestConnection().execute(stringURL).get());
         } catch (InterruptedException e) {
@@ -122,25 +119,24 @@ public class SetSettingsActivity extends ActionBarActivity {
             Log.d("ExecutionException", e.getMessage());
             value = false;
         }
-        Log.d("VALUE", value.toString());
 
         return value;
     }
 
     private class DoTestConnection extends AsyncTask<String, Integer, Boolean>{
 
-//        ProgressDialog mProgressDialog;
+        ProgressDialog mProgressDialog;
 
-//        @Override
-//        protected void onPreExecute(){
-//            super.onPreExecute();
-//
-//            mProgressDialog = new ProgressDialog(SetSettingsActivity.this);
-//            mProgressDialog.setTitle("Setting Connection");
-//            mProgressDialog.setMessage("Connecting...");
-//            mProgressDialog.setIndeterminate(false);
-//            mProgressDialog.show();
-//        }
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+            mProgressDialog = new ProgressDialog(SetSettingsActivity.this);
+            mProgressDialog.setTitle("Setting Connection");
+            mProgressDialog.setMessage("Connecting...");
+            mProgressDialog.setIndeterminate(false);
+            mProgressDialog.show();
+        }
 
 
         @Override
@@ -195,6 +191,11 @@ public class SetSettingsActivity extends ActionBarActivity {
             }
 
             return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean value){
+            mProgressDialog.dismiss();
         }
     }
 

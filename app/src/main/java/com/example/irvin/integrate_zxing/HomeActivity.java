@@ -2,7 +2,9 @@ package com.example.irvin.integrate_zxing;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,11 +19,26 @@ import android.content.Context;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class HomeActivity extends ActionBarActivity {
 
-    private static final int STATIC_INTEGER_VALUE = 1;
+    private static final int STATIC_SETTINGS_VALUE = 1;
+    private static final int STATIC_SEARCH_VALUE = 2;
     final Context context = this;
+    DatabaseHandler db;
+    JSONObject jsonObject = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +46,10 @@ public class HomeActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true); //Sirve
         getSupportActionBar().setDisplayShowHomeEnabled(true); //Sirve
         getSupportActionBar().setIcon(R.mipmap.calvario_logo); //Sirve
-
+        db = new DatabaseHandler(this);
         setTitle("El Calvario");
 
         setContentView(R.layout.activity_home);
-
     }
 
     @Override
@@ -54,7 +70,7 @@ public class HomeActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
 
             Intent intent = new Intent(this, SetSettingsActivity.class);
-            startActivityForResult(intent, STATIC_INTEGER_VALUE);
+            startActivityForResult(intent, STATIC_SETTINGS_VALUE);
 
         } else if (id == R.id.action_scanner) {
 //        if (id == R.id.action_scanner){
@@ -70,25 +86,51 @@ public class HomeActivity extends ActionBarActivity {
 
     public void btnSearch_onClick(View view){
 
-        Intent intent = new Intent(this, ShowResultActivity.class);
-        startActivity(intent);
+        EditText txtBarcodeResult = (EditText)findViewById(R.id.txtBarcodeResult);
+        String text = txtBarcodeResult.getText().toString();
+
+        if (!text.equals("")) {
+            if (Integer.parseInt(text) > 0) {
+                ProgressDialog progressDialog = ProgressDialog.show(HomeActivity.this, "Wait", "Searching...", false, false);
+                Intent intent = new Intent(this, ShowResultActivity.class);
+
+                try {
+                    new DoDownload().execute(Integer.parseInt(text)).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    intent.putExtra("EMPLOYEE_NUMBER", jsonObject.getString("employee_number"));
+                    intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
+                    intent.putExtra("DEPARTMENT", jsonObject.getString("department"));
+                    intent.putExtra("JOB", jsonObject.getString("job"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                progressDialog.dismiss();
+                startActivityForResult(intent, STATIC_SEARCH_VALUE);
+            }
+        }
 
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
-
-        Log.d("requestCode", String.valueOf(requestCode));
-        Log.d("resultCode", String.valueOf(resultCode));
-        Log.d("intent", intent.toString());
-
         switch (requestCode){
-            case (STATIC_INTEGER_VALUE):{
+            case (STATIC_SETTINGS_VALUE):{
                 if(resultCode == Activity.RESULT_OK){
                     String str = intent.getStringExtra("RESULT_CONNECTION");
-                    Log.d("RESULT_CONNECTION", str);
 
                     Toast.makeText(this.getBaseContext(), str, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            case (STATIC_SEARCH_VALUE):{
+                if(resultCode == Activity.RESULT_OK){
+
                 }
                 break;
             }
@@ -102,7 +144,7 @@ public class HomeActivity extends ActionBarActivity {
                 if (result != null) {
                     String contents = result.getContents();
                     if (contents != null) {
-                        //                alertDialogBuilder.setMessage(result.toString());
+
                         content = result.getContents();
 
                     } else {
@@ -130,5 +172,64 @@ public class HomeActivity extends ActionBarActivity {
 
     }
 
+    public class DoDownload extends AsyncTask<Integer, Integer, Void> {
+
+//        ProgressDialog progressDialog = null;
+//
+//        @Override
+//        protected void onPreExecute(){
+//            super.onPreExecute();
+//            Log.d("ON_PRE_EXECUTE", "SI");
+//            progressDialog = ProgressDialog.show(HomeActivity.this,"Wait", "Searching...", true, false);
+//        }
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            Log.d("DO_IN_BACKGROUND", "SI");
+            URL url = null;
+            HttpURLConnection urlConnection = null;
+            InputStream inputStream = null;
+            String stringURL ="http://" + db.getSetting(DatabaseHandler.SETTING.SERVER_ADDRESS) +
+                    ":" + db.getSetting(DatabaseHandler.SETTING.PORT_NUMBER) +
+                    "/" + db.getSetting(DatabaseHandler.SETTING.SERVER_SERVLET) +
+                    "/GetPictureServlet?E=" + String.valueOf(params[0]);
+
+            try{
+                url = new URL(stringURL);
+                urlConnection = (HttpURLConnection) url.openConnection();
+            } catch (MalformedURLException e){
+                Log.d("MalformedURLException", e.getMessage());
+            } catch (IOException e) {
+                Log.d("urlConnection EX", e.getMessage());
+            }
+
+            try{
+                inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder builder = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null){
+                    builder.append(line);
+                }
+
+                jsonObject = new JSONObject(builder.toString());
+            } catch (IOException e) {
+                Log.d("inputStream EX", e.getMessage());
+            } catch (JSONException e) {
+                Log.d("jsonObject EX", e.getMessage());
+            } finally {
+                urlConnection.disconnect();
+            }
+            return null;
+        }
+
+//        @Override
+//        protected void onPostExecute(Void vo){
+//            progressDialog.dismiss();
+//            Log.d("ON_POST_EXECUTE", "SI");
+//        }
+
+    }
 
 }
