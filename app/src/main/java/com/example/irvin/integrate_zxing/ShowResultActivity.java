@@ -1,14 +1,22 @@
 package com.example.irvin.integrate_zxing;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class ShowResultActivity extends ActionBarActivity {
+public class ShowResultActivity extends AppCompatActivity {
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,11 +27,17 @@ public class ShowResultActivity extends ActionBarActivity {
         TextView lblEmployeeName = (TextView)findViewById(R.id.lblEmployeeName);
         TextView lblEmployeeDepto = (TextView)findViewById(R.id.lblEmployeeDepto);
         TextView lblEmployeeJob = (TextView)findViewById(R.id.lblEmployeeJob);
+        ImageButton btnEmployeePicture = (ImageButton)findViewById(R.id.btnEmployeePicture);
+
+//        byte[] decodeString = Base64.decode(intent.getStringExtra("PICTURE"), Base64.DEFAULT);
+//        Bitmap bitmap = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
+//        BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
 
         this.setTitle(intent.getStringExtra("EMPLOYEE_NUMBER"));
         lblEmployeeName.setText(intent.getStringExtra("EMPLOYEE_NAME"));
         lblEmployeeDepto.setText(intent.getStringExtra("DEPARTMENT"));
         lblEmployeeJob.setText(intent.getStringExtra("JOB"));
+//        btnEmployeePicture.setBackground(bitmapDrawable);
 
     }
 

@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,9 +30,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
-
-import static com.example.irvin.integrate_zxing.R.string.searching;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -224,12 +220,16 @@ public class HomeActivity extends AppCompatActivity {
         protected void onPostExecute(JSONObject jsonObject){
             super.onPostExecute(jsonObject);
             Intent intent = new Intent(context, ShowResultActivity.class);
+
             if (jsonObject != null) {
                 try {
+
                     intent.putExtra("EMPLOYEE_NUMBER", jsonObject.getString("employee_number"));
                     intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
                     intent.putExtra("DEPARTMENT", jsonObject.getString("department"));
                     intent.putExtra("JOB", jsonObject.getString("job"));
+                    intent.putExtra("PICTURE", jsonObject.getString("picture"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
