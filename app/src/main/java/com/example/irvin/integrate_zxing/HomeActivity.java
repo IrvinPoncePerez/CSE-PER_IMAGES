@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,20 +33,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
-public class HomeActivity extends ActionBarActivity {
+import static com.example.irvin.integrate_zxing.R.string.searching;
+
+public class HomeActivity extends AppCompatActivity {
 
     private static final int STATIC_SETTINGS_VALUE = 1;
-    private static final int STATIC_SEARCH_VALUE = 2;
     final Context context = this;
     DatabaseHandler db;
-    JSONObject jsonObject = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayUseLogoEnabled(true); //Sirve
-        getSupportActionBar().setDisplayShowHomeEnabled(true); //Sirve
-        getSupportActionBar().setIcon(R.mipmap.calvario_logo); //Sirve
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayUseLogoEnabled(true); //Sirve
+            getSupportActionBar().setDisplayShowHomeEnabled(true); //Sirve
+            getSupportActionBar().setIcon(R.mipmap.calvario_logo); //Sirve
+        }
         db = new DatabaseHandler(this);
         setTitle("El Calvario");
 
@@ -91,30 +94,7 @@ public class HomeActivity extends ActionBarActivity {
 
         if (!text.equals("")) {
             if (Integer.parseInt(text) > 0) {
-                Intent intent = new Intent(this, ShowResultActivity.class);
-                Boolean value = false;
-                try {
-                    value = new DoDownload().execute(Integer.parseInt(text)).get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                if (value == true) {
-                    try {
-                        intent.putExtra("EMPLOYEE_NUMBER", jsonObject.getString("employee_number"));
-                        intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
-                        intent.putExtra("DEPARTMENT", jsonObject.getString("department"));
-                        intent.putExtra("JOB", jsonObject.getString("job"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    jsonObject = null; //agregada hoy;
-                    startActivityForResult(intent, STATIC_SEARCH_VALUE);
-                } else {
-                    Toast.makeText(this.getBaseContext(), getResources().getString(R.string.no_connectivity), Toast.LENGTH_SHORT).show();
-                }
+                new DoDownload(this).execute(Integer.parseInt(text));
             }
         }
 
@@ -128,12 +108,6 @@ public class HomeActivity extends ActionBarActivity {
                     String str = intent.getStringExtra("RESULT_CONNECTION");
 
                     Toast.makeText(this.getBaseContext(), str, Toast.LENGTH_SHORT).show();
-                }
-                break;
-            }
-            case (STATIC_SEARCH_VALUE):{
-                if(resultCode == Activity.RESULT_OK){
-
                 }
                 break;
             }
@@ -175,66 +149,100 @@ public class HomeActivity extends ActionBarActivity {
 
     }
 
-    public class DoDownload extends AsyncTask<Integer, Integer, Boolean> {
+    public class DoDownload extends AsyncTask<Integer, Integer, JSONObject> {
 
         ProgressDialog progressDialog = null;
+        Context context;
+
+
+        public DoDownload(Activity activity){
+            progressDialog = new ProgressDialog(activity);
+            context = activity;
+        }
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
             Log.d("ON_PRE_EXECUTE", "SI");
-            progressDialog = ProgressDialog.show(HomeActivity.this,
-                                                 getString(R.string.wait_searching),
-                                                 getString(R.string.searching), false, false);
+            progressDialog.setTitle(getResources().getString(R.string.wait_searching));
+            progressDialog.setMessage(getResources().getString(R.string.searching));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            Toast.makeText(context, "Buscando...", Toast.LENGTH_SHORT);
         }
 
         @Override
-        protected Boolean doInBackground(Integer... params) {
+        protected JSONObject doInBackground(Integer... params) {
             Log.d("DO_IN_BACKGROUND", "SI");
-            URL url = null;
+
             HttpURLConnection urlConnection = null;
-            InputStream inputStream = null;
+            InputStream inputStream;
+            URL url;
+            JSONObject jsonObject = null;
             String stringURL ="http://" + db.getSetting(DatabaseHandler.SETTING.SERVER_ADDRESS) +
                     ":" + db.getSetting(DatabaseHandler.SETTING.PORT_NUMBER) +
                     "/" + db.getSetting(DatabaseHandler.SETTING.SERVER_SERVLET) +
-                    "/GetPictureServlet?E=" + String.valueOf(params[0]);
+                    "/GetPictureServlet?E=" + params[0];
 
             try{
                 url = new URL(stringURL);
                 urlConnection = (HttpURLConnection) url.openConnection();
             } catch (MalformedURLException e){
                 Log.d("MalformedURLException", e.getMessage());
-                return false;
             } catch (IOException e) {
                 Log.d("urlConnection EX", e.getMessage());
-                return false;
             }
 
             try{
-                inputStream = new BufferedInputStream(urlConnection.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuilder builder = new StringBuilder();
-                String line;
 
-                while ((line = reader.readLine()) != null){
-                    builder.append(line);
+                if (urlConnection != null){
+                    inputStream = new BufferedInputStream(urlConnection.getInputStream());
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuilder builder = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null){
+                        builder.append(line);
+                    }
+
+                    jsonObject = new JSONObject(builder.toString());
+                    urlConnection.disconnect();
                 }
-
-                jsonObject = new JSONObject(builder.toString());
-                urlConnection.disconnect();
             } catch (IOException e) {
                 Log.d("inputStream EX", e.getMessage());
-                return false;
             } catch (JSONException e) {
                 Log.d("jsonObject EX", e.getMessage());
-                return false;
+            } catch (NullPointerException e){
+                Log.d("NullPointerException", e.getMessage());
             }
-            return true;
+            return jsonObject;
         }
 
         @Override
-        protected void onPostExecute(Boolean aBoolean){
-            progressDialog.dismiss();
+        protected void onPostExecute(JSONObject jsonObject){
+            super.onPostExecute(jsonObject);
+            Intent intent = new Intent(context, ShowResultActivity.class);
+            if (jsonObject != null) {
+                try {
+                    intent.putExtra("EMPLOYEE_NUMBER", jsonObject.getString("employee_number"));
+                    intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
+                    intent.putExtra("DEPARTMENT", jsonObject.getString("department"));
+                    intent.putExtra("JOB", jsonObject.getString("job"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                startActivity(intent);
+            } else {
+                Toast.makeText(context, getResources().getString(R.string.no_connectivity), Toast.LENGTH_SHORT).show();
+            }
+
+            if (progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
+
             Log.d("ON_POST_EXECUTE", "SI");
         }
 
