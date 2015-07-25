@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_scanner">Scaner</string>
+    <string name="action_settings">Configuración</string>
+    <string name="connecting">Conectando...</string>
+    <string name="no_connectivity">Sin Conectividad</string>
+    <string name="no_result">Sin Resultado del Scaner</string>
+    <string name="port_Number">Número de Puerto</string>
+    <string name="searching">Buscando...</string>
+    <string name="server_Address">Dirección de Servidor</string>
+    <string name="servlet_server">Contenedor de Servlets</string>
+    <string name="setting_connection">Estableciendo Conexión</string>
+    <string name="wait_searching">Espere</string>
+    <string name="text_hint"><font size="30">Número Aquí</font></string>
+</resources>

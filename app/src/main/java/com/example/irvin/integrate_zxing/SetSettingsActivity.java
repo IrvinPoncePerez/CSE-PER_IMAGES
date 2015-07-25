@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.irvin.integrate_zxing.DatabaseHandler.SETTING;
 
@@ -84,6 +85,8 @@ public class SetSettingsActivity extends ActionBarActivity {
             setResult(Activity.RESULT_OK,intentBack);
 
             this.finish();
+        } else {
+            Toast.makeText(this.getBaseContext(), getString(R.string.no_connectivity), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -132,8 +135,8 @@ public class SetSettingsActivity extends ActionBarActivity {
             super.onPreExecute();
 
             mProgressDialog = new ProgressDialog(SetSettingsActivity.this);
-            mProgressDialog.setTitle("Setting Connection");
-            mProgressDialog.setMessage("Connecting...");
+            mProgressDialog.setTitle(getString(R.string.setting_connection));
+            mProgressDialog.setMessage(getString(R.string.connecting));
             mProgressDialog.setIndeterminate(false);
             mProgressDialog.show();
         }

@@ -4,12 +4,13 @@
     <string name="action_scanner">Scanner</string>
     <string name="home_label">El Calvario</string>
     <string name="text_hint"><font size="30">Barcode Here</font></string>
-    <string name="barcode_content">No CODE!</string>
-    <string name="title_activity_show_result">ShowResultActivity</string>
-    <string name="title_barcode">000</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_set_settings">SetSettingsActivity</string>
     <string name="server_Address">Server Address</string>
     <string name="port_Number">Port Number</string>
-    <string name="servlet_server">Server Servlet</string>
+    <string name="servlet_server">Servlet Container</string>
+    <string name="no_connectivity">No Connectivity</string>
+    <string name="no_result">Don\'t result scanner</string>
+    <string name="wait_searching">Wait</string>
+    <string name="searching">Searching...</string>
+    <string name="setting_connection">Setting Connection</string>
+    <string name="connecting">Connecting...</string>
 </resources>

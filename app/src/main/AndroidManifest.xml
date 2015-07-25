@@ -24,7 +24,6 @@
 
         <activity
             android:name=".ShowResultActivity"
-            android:label="@string/title_barcode"
             android:parentActivityName=".HomeActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -33,7 +32,7 @@
         </activity>
         <activity
             android:name=".SetSettingsActivity"
-            android:label="Settings"
+            android:label="@string/action_settings"
             android:parentActivityName=".HomeActivity"
             android:screenOrientation="portrait">
             <meta-data
