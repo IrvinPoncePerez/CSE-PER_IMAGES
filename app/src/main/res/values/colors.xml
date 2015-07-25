@@ -5,11 +5,11 @@
     <!--<item name="calvario1" type="color">#D4D0C8</item>-->
     <item name="calvario2" type="color">#F4BF01</item>
     <item name="calvario3" type="color">#E2AA00</item>
-    <item name="calvarioBlack" type="color">#000000</item>
-    <item name="calvarioGray" type="color">#444444</item>
-    <item name="calvarioWhite" type="color">#ffffff</item>
-    <item name="calvarioShadow" type="color">#D4D0C8</item>
-    <item name="calvarioDarkGray" type="color">#D4D0C8</item>
-    <item name="calvarioLightGray" type="color">#F5F5F5</item>
+    <item name="calvario4" type="color">#000000</item>
+    <item name="calvario5" type="color">#444444</item>
+    <item name="calvario6" type="color">#ffffff</item>
+    <item name="calvario7" type="color">#D4D0C8</item>
+    <item name="calvario8" type="color">#D4D0C8</item>
+    <item name="calvario9" type="color">#F5F5F5</item>
 
 </resources>

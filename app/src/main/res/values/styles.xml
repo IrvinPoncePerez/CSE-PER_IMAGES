@@ -22,7 +22,7 @@
     </style>
 
     <style name="TextViewStyle">
-        <item name="android:textColor">@color/calvarioBlack</item>
+        <item name="android:textColor">@color/calvario4</item>
     </style>
 
 </resources>
