@@ -34,7 +34,27 @@ public class ShowResultActivity extends AppCompatActivity {
     private final static int CAMERA_CAPTURE = 1;
     private final static int PICTURE_CROP = 2;
 
+    private enum IMAGE_OPTION{
+        TAKE_PICTURE("TAKE_PICTURE", 1),
+        CROP_PICTURE("CROP_PICTURE", 2);
+
+        private String stringValue;
+        private int intValue;
+
+        IMAGE_OPTION(String toString, int toInt){
+            stringValue = toString;
+            intValue = toInt;
+        }
+
+        @Override
+        public String toString(){
+            return stringValue;
+        }
+    }
+
+
     String mCurrentPhotoPath;
+    String mCropCurrentPhotoPath;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -88,6 +108,7 @@ public class ShowResultActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK){
             if (requestCode == CAMERA_CAPTURE){
                 try {
+                    File photoFile = createImageFile(IMAGE_OPTION.CROP_PICTURE);
                     Uri uriData = Uri.parse(mCurrentPhotoPath);
                     Intent intent = new Intent("com.android.camera.action.CROP");
                     intent.setDataAndType(uriData, "image/*");
@@ -96,15 +117,28 @@ public class ShowResultActivity extends AppCompatActivity {
                     intent.putExtra("aspectY", 1);
                     intent.putExtra("outputX", 500);
                     intent.putExtra("outputY", 500);
-                    intent.putExtra("return-data", true);
+                    intent.putExtra("return-data", false);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+
                     startActivityForResult(intent, PICTURE_CROP);
                 } catch (ActivityNotFoundException ex){
                     String errorMessage = "Whoops - your device doesn't support the crop action!";
                     Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
                     toast.show();
+                } catch (IOException e) {
+                    Log.d("onAction IOException", e.getMessage());
                 }
             } else if (requestCode == PICTURE_CROP){
+                Uri uri = data.getData();
 
+                Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(uri, 100, 100);
+
+//                BitmapFactory.Options options = new BitmapFactory.Options();
+//                options.inJustDecodeBounds = true;
+//                BitmapFactory.decodeFile(uri.getPath(), options);
+//                int imageHeight = options.outHeight;
+//                int imageWidth = options.outWidth;
+//                String imageType = options.outMimeType;
             }
         }
     }
@@ -114,13 +148,7 @@ public class ShowResultActivity extends AppCompatActivity {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(getPackageManager()) != null){
 
-                File photoFile = null;
-                try{
-                    photoFile = createImageFile();
-                } catch (IOException ex){
-                    Log.d("IOException", ex.getMessage());
-                }
-
+                File photoFile = createImageFile(IMAGE_OPTION.TAKE_PICTURE);
                 if (photoFile != null){
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                     startActivityForResult(intent, CAMERA_CAPTURE);
@@ -131,10 +159,12 @@ public class ShowResultActivity extends AppCompatActivity {
             String errorMessage = "Whoops - your device doesn't support capturing images!";
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
+        } catch (IOException e) {
+            Log.d("Camera IOException", e.getMessage());
         }
     }
 
-    private File createImageFile() throws IOException {
+    private File createImageFile(IMAGE_OPTION option) throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -147,7 +177,11 @@ public class ShowResultActivity extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        if (option == IMAGE_OPTION.TAKE_PICTURE) {
+            mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        } else if (option == IMAGE_OPTION.CROP_PICTURE){
+            mCropCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        }
         return image;
     }
 

@@ -13,14 +13,11 @@ import android.renderscript.Sampler;
 
 public class DatabaseHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "SETTINGS_MANAGER";
     private static final String TABLE_SETTINGS = "SETTINGS";
     private static final String KEY_DESCRIPTION = "DESCRIPTION";
     private static final String KEY_VALUE = "VALUE";
-
-    private static final String TABLE_IMAGE = "IMAGE";
-    private static final String KEY_IMAGE = "IMAGE";
 
     public enum SETTING{
         SERVER_ADDRESS("SERVER_ADDRES", 0),
@@ -51,11 +48,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                                         KEY_DESCRIPTION + " STRING, " +
                                         KEY_VALUE + " STRING)";
 
-        String CREATE_IMAGE_TABLE = "CREATE TABLE " + TABLE_IMAGE + "(" +
-                                        KEY_IMAGE + " STRING)";
-
         db.execSQL(CREATE_SETTING_TABLE);
-        db.execSQL(CREATE_IMAGE_TABLE);
 
         addSetting(db, SETTING.SERVER_ADDRESS, "");
         addSetting(db, SETTING.PORT_NUMBER, "");
@@ -65,7 +58,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTINGS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_IMAGE);
         onCreate(db);
     }
 
@@ -111,21 +103,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                          values,
                          KEY_DESCRIPTION + "=?",
                          new String[]{setting.toString()});
-    }
-
-    public void saveImage(String stringImage){
-        ContentValues values = new ContentValues();
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        values.put(KEY_IMAGE, stringImage);
-
-        db.insert(TABLE_IMAGE, null, values);
-    }
-
-    public String getImage(){
-        String value = "";
-
-        return value;
     }
 
 }
