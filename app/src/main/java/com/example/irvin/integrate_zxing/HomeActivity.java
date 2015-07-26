@@ -31,7 +31,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity{
 
     private static final int STATIC_SETTINGS_VALUE = 1;
     final Context context = this;
@@ -85,14 +85,17 @@ public class HomeActivity extends AppCompatActivity {
 
     public void btnSearch_onClick(View view){
 
-        EditText txtBarcodeResult = (EditText)findViewById(R.id.txtBarcodeResult);
-        String text = txtBarcodeResult.getText().toString();
+//        EditText txtBarcodeResult = (EditText)findViewById(R.id.txtBarcodeResult);
+//        String text = txtBarcodeResult.getText().toString();
+//
+//        if (!text.equals("")) {
+//            if (Integer.parseInt(text) > 0) {
+//                new DoDownload(this).execute(Integer.parseInt(text));
+//            }
+//        }
 
-        if (!text.equals("")) {
-            if (Integer.parseInt(text) > 0) {
-                new DoDownload(this).execute(Integer.parseInt(text));
-            }
-        }
+        Intent intent = new Intent(context, ShowResultActivity.class);
+        startActivity(intent);
 
     }
 

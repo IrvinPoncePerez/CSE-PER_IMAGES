@@ -22,21 +22,21 @@ public class ShowResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_result);
 
-        Intent intent = this.getIntent();
-
-        TextView lblEmployeeName = (TextView)findViewById(R.id.lblEmployeeName);
-        TextView lblEmployeeDepto = (TextView)findViewById(R.id.lblEmployeeDepto);
-        TextView lblEmployeeJob = (TextView)findViewById(R.id.lblEmployeeJob);
-        ImageButton btnEmployeePicture = (ImageButton)findViewById(R.id.btnEmployeePicture);
+//        Intent intent = this.getIntent();
+//
+//        TextView lblEmployeeName = (TextView)findViewById(R.id.lblEmployeeName);
+//        TextView lblEmployeeDepto = (TextView)findViewById(R.id.lblEmployeeDepto);
+//        TextView lblEmployeeJob = (TextView)findViewById(R.id.lblEmployeeJob);
+//        ImageButton btnEmployeePicture = (ImageButton)findViewById(R.id.btnEmployeePicture);
 
 //        byte[] decodeString = Base64.decode(intent.getStringExtra("PICTURE"), Base64.DEFAULT);
 //        Bitmap bitmap = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
 //        BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
 
-        this.setTitle(intent.getStringExtra("EMPLOYEE_NUMBER"));
-        lblEmployeeName.setText(intent.getStringExtra("EMPLOYEE_NAME"));
-        lblEmployeeDepto.setText(intent.getStringExtra("DEPARTMENT"));
-        lblEmployeeJob.setText(intent.getStringExtra("JOB"));
+//        this.setTitle(intent.getStringExtra("EMPLOYEE_NUMBER"));
+//        lblEmployeeName.setText(intent.getStringExtra("EMPLOYEE_NAME"));
+//        lblEmployeeDepto.setText(intent.getStringExtra("DEPARTMENT"));
+//        lblEmployeeJob.setText(intent.getStringExtra("JOB"));
 //        btnEmployeePicture.setBackground(bitmapDrawable);
 
     }
