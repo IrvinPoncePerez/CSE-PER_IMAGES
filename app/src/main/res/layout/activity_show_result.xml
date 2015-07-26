@@ -8,7 +8,8 @@
     tools:context="com.example.irvin.integrate_zxing.ShowResultActivity">
 
     <ImageButton
-        android:id="@+id/btnEmployeePicture"
+        android:id="@+id/btnCameraCapture"
+        android:onClick="btnCameraCapture_onClick"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_alignParentTop="true"
@@ -22,7 +23,7 @@
         android:theme="@style/TextViewStyle"
         android:textSize="18dp"
         android:paddingTop="10dp"
-        android:layout_below="@+id/btnEmployeePicture"
+        android:layout_below="@+id/btnCameraCapture"
         android:layout_centerHorizontal="true"
         android:textStyle="bold" />
 
@@ -47,7 +48,6 @@
     <ImageButton
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/imageButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/round_selector_button"
