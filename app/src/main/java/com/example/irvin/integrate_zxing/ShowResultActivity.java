@@ -34,25 +34,6 @@ public class ShowResultActivity extends AppCompatActivity {
     private final static int CAMERA_CAPTURE = 1;
     private final static int PICTURE_CROP = 2;
 
-    private enum IMAGE_OPTION{
-        TAKE_PICTURE("TAKE_PICTURE", 1),
-        CROP_PICTURE("CROP_PICTURE", 2);
-
-        private String stringValue;
-        private int intValue;
-
-        IMAGE_OPTION(String toString, int toInt){
-            stringValue = toString;
-            intValue = toInt;
-        }
-
-        @Override
-        public String toString(){
-            return stringValue;
-        }
-    }
-
-
     String mCurrentPhotoPath;
     String mCropCurrentPhotoPath;
 
@@ -103,12 +84,14 @@ public class ShowResultActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if (resultCode == RESULT_OK){
             if (requestCode == CAMERA_CAPTURE){
                 try {
-                    File photoFile = createImageFile(IMAGE_OPTION.CROP_PICTURE);
+                    File photoFile = ImageTool.createImageFile(ImageTool.IMAGE_OPTION.CROP_PICTURE);
+                    mCropCurrentPhotoPath = "file:" + photoFile.getAbsolutePath();
                     Uri uriData = Uri.parse(mCurrentPhotoPath);
                     Intent intent = new Intent("com.android.camera.action.CROP");
                     intent.setDataAndType(uriData, "image/*");
@@ -132,6 +115,9 @@ public class ShowResultActivity extends AppCompatActivity {
                 Uri uri = data.getData();
 
                 Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(uri, 100, 100);
+                BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+                ImageButton btnCameraPicture = (ImageButton)findViewById(R.id.btnCameraCapture);
+                btnCameraPicture.setBackground(bitmapDrawable);
 
 //                BitmapFactory.Options options = new BitmapFactory.Options();
 //                options.inJustDecodeBounds = true;
@@ -148,11 +134,10 @@ public class ShowResultActivity extends AppCompatActivity {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(getPackageManager()) != null){
 
-                File photoFile = createImageFile(IMAGE_OPTION.TAKE_PICTURE);
-                if (photoFile != null){
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                    startActivityForResult(intent, CAMERA_CAPTURE);
-                }
+                File photoFile = ImageTool.createImageFile(ImageTool.IMAGE_OPTION.TAKE_PICTURE);
+                mCurrentPhotoPath = "file:" + photoFile.getAbsolutePath();
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(intent, CAMERA_CAPTURE);
 
             }
         } catch (ActivityNotFoundException ex) {
@@ -164,25 +149,6 @@ public class ShowResultActivity extends AppCompatActivity {
         }
     }
 
-    private File createImageFile(IMAGE_OPTION option) throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
 
-        // Save a file: path for use with ACTION_VIEW intents
-        if (option == IMAGE_OPTION.TAKE_PICTURE) {
-            mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        } else if (option == IMAGE_OPTION.CROP_PICTURE){
-            mCropCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        }
-        return image;
-    }
 
 }

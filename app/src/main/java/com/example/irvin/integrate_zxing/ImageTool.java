@@ -3,14 +3,38 @@ package com.example.irvin.integrate_zxing;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Irvin Ponce on 26/07/2015.
+ * version final.
  */
 public class ImageTool {
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public enum IMAGE_OPTION{
+        TAKE_PICTURE("TAKE_PICTURE", 1),
+        CROP_PICTURE("CROP_PICTURE", 2);
+
+        private String stringValue;
+        private int intValue;
+
+        IMAGE_OPTION(String toString, int toInt){
+            stringValue = toString;
+            intValue = toInt;
+        }
+
+        @Override
+        public String toString(){
+            return stringValue;
+        }
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -45,6 +69,28 @@ public class ImageTool {
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(uri.getPath(), options);
+    }
+
+    public static File createImageFile(IMAGE_OPTION option) throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        return File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+//        if (option == IMAGE_OPTION.TAKE_PICTURE) {
+//            mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+//        } else if (option == IMAGE_OPTION.CROP_PICTURE){
+//            mCropCurrentPhotoPath = "file:" + image.getAbsolutePath();
+//        }
+
+//        return image;
     }
 
 }

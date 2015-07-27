@@ -2,6 +2,9 @@ package com.example.irvin.integrate_zxing;
 
 /**
  * Created by IRVIN on 21/07/2015.
+ * Description: Only for Settings.
+ *
+ * DATABASE_VERSION 4.
  */
 
 import android.content.ContentValues;
@@ -9,7 +12,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.renderscript.Sampler;
 
 public class DatabaseHandler extends SQLiteOpenHelper{
 
