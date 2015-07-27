@@ -36,6 +36,7 @@ public class ShowResultActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
     String mCropCurrentPhotoPath;
+    String mDonwloadPhotoPath;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -43,22 +44,24 @@ public class ShowResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_result);
 
-//        Intent intent = this.getIntent();
-//
-//        TextView lblEmployeeName = (TextView)findViewById(R.id.lblEmployeeName);
-//        TextView lblEmployeeDepto = (TextView)findViewById(R.id.lblEmployeeDepto);
-//        TextView lblEmployeeJob = (TextView)findViewById(R.id.lblEmployeeJob);
-//        ImageButton btnEmployeePicture = (ImageButton)findViewById(R.id.btnEmployeePicture);
+        Intent intent = this.getIntent();
 
-//        byte[] decodeString = Base64.decode(intent.getStringExtra("PICTURE"), Base64.DEFAULT);
-//        Bitmap bitmap = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
-//        BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+        TextView lblEmployeeName = (TextView)findViewById(R.id.lblEmployeeName);
+        TextView lblEmployeeDepto = (TextView)findViewById(R.id.lblEmployeeDepto);
+        TextView lblEmployeeJob = (TextView)findViewById(R.id.lblEmployeeJob);
+        ImageButton btnCameraCapture = (ImageButton)findViewById(R.id.btnCameraCapture);
 
-//        this.setTitle(intent.getStringExtra("EMPLOYEE_NUMBER"));
-//        lblEmployeeName.setText(intent.getStringExtra("EMPLOYEE_NAME"));
-//        lblEmployeeDepto.setText(intent.getStringExtra("DEPARTMENT"));
-//        lblEmployeeJob.setText(intent.getStringExtra("JOB"));
-//        btnEmployeePicture.setBackground(bitmapDrawable);
+        this.setTitle(intent.getStringExtra("EMPLOYEE_NUMBER"));
+        lblEmployeeName.setText(intent.getStringExtra("EMPLOYEE_NAME"));
+        lblEmployeeDepto.setText(intent.getStringExtra("DEPARTMENT"));
+        lblEmployeeJob.setText(intent.getStringExtra("JOB"));
+        this.mDonwloadPhotoPath = intent.getStringExtra("PICTURE");
+
+        if (mDonwloadPhotoPath != "") {
+            Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(Uri.parse(mDonwloadPhotoPath), 100, 100);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+            btnCameraCapture.setBackground(bitmapDrawable);
+        }
 
     }
 
@@ -90,7 +93,7 @@ public class ShowResultActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK){
             if (requestCode == CAMERA_CAPTURE){
                 try {
-                    File photoFile = ImageTool.createImageFile(ImageTool.IMAGE_OPTION.CROP_PICTURE);
+                    File photoFile = ImageTool.createImageFile();
                     mCropCurrentPhotoPath = "file:" + photoFile.getAbsolutePath();
                     Uri uriData = Uri.parse(mCurrentPhotoPath);
                     Intent intent = new Intent("com.android.camera.action.CROP");
@@ -134,7 +137,7 @@ public class ShowResultActivity extends AppCompatActivity {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(getPackageManager()) != null){
 
-                File photoFile = ImageTool.createImageFile(ImageTool.IMAGE_OPTION.TAKE_PICTURE);
+                File photoFile = ImageTool.createImageFile();
                 mCurrentPhotoPath = "file:" + photoFile.getAbsolutePath();
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                 startActivityForResult(intent, CAMERA_CAPTURE);

@@ -12,9 +12,10 @@
         android:onClick="btnCameraCapture_onClick"
         android:layout_width="250dp"
         android:layout_height="250dp"
+        android:background="@drawable/rectangle_selector_button"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/rectangle_selector_button" />
+        android:padding="5dp" />
 
     <TextView
         android:id="@+id/lblEmployeeName"
@@ -52,4 +53,5 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/round_selector_button"
         android:src="@drawable/upload" />
+
 </RelativeLayout>

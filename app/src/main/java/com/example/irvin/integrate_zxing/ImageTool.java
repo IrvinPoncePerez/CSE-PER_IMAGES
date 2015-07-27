@@ -16,24 +16,6 @@ import java.util.Date;
  */
 public class ImageTool {
 
-    public enum IMAGE_OPTION{
-        TAKE_PICTURE("TAKE_PICTURE", 1),
-        CROP_PICTURE("CROP_PICTURE", 2);
-
-        private String stringValue;
-        private int intValue;
-
-        IMAGE_OPTION(String toString, int toInt){
-            stringValue = toString;
-            intValue = toInt;
-        }
-
-        @Override
-        public String toString(){
-            return stringValue;
-        }
-    }
-
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
@@ -71,7 +53,7 @@ public class ImageTool {
         return BitmapFactory.decodeFile(uri.getPath(), options);
     }
 
-    public static File createImageFile(IMAGE_OPTION option) throws IOException {
+    public static File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";

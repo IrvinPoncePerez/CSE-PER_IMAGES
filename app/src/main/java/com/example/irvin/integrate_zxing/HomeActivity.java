@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -85,17 +88,17 @@ public class HomeActivity extends AppCompatActivity{
 
     public void btnSearch_onClick(View view){
 
-//        EditText txtBarcodeResult = (EditText)findViewById(R.id.txtBarcodeResult);
-//        String text = txtBarcodeResult.getText().toString();
-//
-//        if (!text.equals("")) {
-//            if (Integer.parseInt(text) > 0) {
-//                new DoDownload(this).execute(Integer.parseInt(text));
-//            }
-//        }
+        EditText txtBarcodeResult = (EditText)findViewById(R.id.txtBarcodeResult);
+        String text = txtBarcodeResult.getText().toString();
 
-        Intent intent = new Intent(context, ShowResultActivity.class);
-        startActivity(intent);
+        if (!text.equals("")) {
+            if (Integer.parseInt(text) > 0) {
+                new DoDownload(this).execute(Integer.parseInt(text));
+            }
+        }
+
+//        Intent intent = new Intent(context, ShowResultActivity.class);
+//        startActivity(intent);
 
     }
 
@@ -114,7 +117,7 @@ public class HomeActivity extends AppCompatActivity{
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                alertDialogBuilder.setTitle(R.string.app_name);
+                alertDialogBuilder.setTitle(getResources().getString(R.string.action_scanner));
                 String content = "0";
 
                 if (result != null) {
@@ -231,10 +234,10 @@ public class HomeActivity extends AppCompatActivity{
                     intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
                     intent.putExtra("DEPARTMENT", jsonObject.getString("department"));
                     intent.putExtra("JOB", jsonObject.getString("job"));
-                    intent.putExtra("PICTURE", jsonObject.getString("picture"));
+                    intent.putExtra("PICTURE", saveStringAsFile(jsonObject.getString("picture")));
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.d("JSONException", e.getMessage());
                 }
 
                 startActivity(intent);
@@ -249,6 +252,28 @@ public class HomeActivity extends AppCompatActivity{
             Log.d("ON_POST_EXECUTE", "SI");
         }
 
+    }
+
+    private String saveStringAsFile(String pictureString){
+        File photoFile = null;
+        String mDonwloadPicture;
+
+        try {
+            photoFile = ImageTool.createImageFile();
+            mDonwloadPicture = "file:" + photoFile.getAbsolutePath();
+
+            FileOutputStream outputStream = new FileOutputStream(photoFile, true);
+            byte[] encodeString = Base64.decode(pictureString, Base64.DEFAULT);
+
+            outputStream.write(encodeString);
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            Log.d("IOException", e.getMessage());
+            return "";
+        }
+
+        return  mDonwloadPicture;
     }
 
 }
