@@ -238,7 +238,7 @@ public class HomeActivity extends AppCompatActivity{
 
             try {
                 if (jsonObject != null) {
-                    if (jsonObject.getString("employee_name").equals("") && jsonObject.getString("employee_name").equals(" ")){
+                    if (!jsonObject.getString("employee_name").equals("") && !jsonObject.getString("employee_name").equals(" ")){
 
                         intent.putExtra("EMPLOYEE_NUMBER", jsonObject.getString("employee_number"));
                         intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
