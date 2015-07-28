@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,10 +29,10 @@ import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 
-public class SetSettingsActivity extends ActionBarActivity {
+public class SetSettingsActivity extends AppCompatActivity {
 
-    DatabaseHandler db;
-    String resultConnection;
+    private DatabaseHandler db;
+    private String resultConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class SetSettingsActivity extends ActionBarActivity {
             Log.d("ERROR_ON_SAVE", ex.getMessage());
         }
 
-        if (testConnection() == true) {
+        if (testConnection()) {
 
             Intent intentBack = new Intent();
             intentBack.putExtra("RESULT_CONNECTION", resultConnection);
@@ -144,8 +144,8 @@ public class SetSettingsActivity extends ActionBarActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            URL url = null;
-            HttpURLConnection urlConnection = null;
+            URL url;
+            HttpURLConnection urlConnection;
 
             try {
                 url = new URL(params[0]);
@@ -158,15 +158,13 @@ public class SetSettingsActivity extends ActionBarActivity {
                 urlConnection = (HttpURLConnection) url.openConnection();
             } catch (IOException e) {
                 Log.d("IOException", e.getMessage());
-                urlConnection.disconnect();
                 return false;
             } catch (Exception ex){
                 Log.d("Exception", ex.getMessage());
-                urlConnection.disconnect();
                 return false;
             }
 
-            InputStream inputStream = null;
+            InputStream inputStream;
             try {
                 inputStream = new BufferedInputStream(urlConnection.getInputStream());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -187,7 +185,6 @@ public class SetSettingsActivity extends ActionBarActivity {
 
             } catch (IOException e) {
                 Log.d("GET_INPUT_STREAM", e.getMessage());
-                urlConnection.disconnect();
                 return false;
             } finally {
                 urlConnection.disconnect();

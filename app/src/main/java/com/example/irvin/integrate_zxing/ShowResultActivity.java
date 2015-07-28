@@ -38,10 +38,10 @@ public class ShowResultActivity extends AppCompatActivity {
     private final static int CAMERA_CAPTURE = 1;
     private final static int PICTURE_CROP = 2;
 
-    String mCurrentPhotoPath;
-    String mCropCurrentPhotoPath;
-    String mDonwloadPhotoPath;
-    String mEmployeeNumber;
+    private String mCurrentPhotoPath;
+    private String mCropCurrentPhotoPath;
+    private String mDonwloadPhotoPath;
+    private String mEmployeeNumber;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -67,9 +67,9 @@ public class ShowResultActivity extends AppCompatActivity {
         lblEmployeeJob.setText(intent.getStringExtra("JOB"));
         this.mDonwloadPhotoPath = intent.getStringExtra("PICTURE");
 
-        if (mDonwloadPhotoPath.equals("")) {
+        if (!mDonwloadPhotoPath.equals("")) {
             Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(Uri.parse(mDonwloadPhotoPath), 100, 100);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(this.getResources(), bitmap);
             imgEmployeePicture.setImageDrawable(bitmapDrawable);
             //btnCameraCapture.setBackground(bitmapDrawable);
         }
@@ -129,7 +129,7 @@ public class ShowResultActivity extends AppCompatActivity {
                 Uri uri = data.getData();
 
                 Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(uri, 100, 100);
-                BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+                BitmapDrawable bitmapDrawable = new BitmapDrawable(this.getResources(), bitmap);
                 //ImageButton btnCameraPicture = (ImageButton)findViewById(R.id.btnCameraCapture);
                 //btnCameraPicture.setBackground(bitmapDrawable);
                 ImageView imgEmployeePicture = (ImageView)findViewById(R.id.imgEmployeePicture);
@@ -181,9 +181,9 @@ public class ShowResultActivity extends AppCompatActivity {
 
     public class DoUpload extends AsyncTask<String, Integer, Boolean>{
 
-        ProgressDialog progressDialog = null;
-        Context context;
-        DatabaseHandler db;
+        private ProgressDialog progressDialog = null;
+        private Context context;
+        private DatabaseHandler db;
 
         public DoUpload(Activity activity){
             progressDialog = new ProgressDialog(activity);

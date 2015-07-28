@@ -39,8 +39,8 @@ public class HomeActivity extends AppCompatActivity{
     private static final int STATIC_SETTINGS_VALUE = 1;
     private static final int SHOW_RESULT_ACTIVITY = 2;
 
-    final Context context = this;
-    DatabaseHandler db;
+    private final Context context = this;
+    private DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +153,7 @@ public class HomeActivity extends AppCompatActivity{
                     }
 
                     EditText editText = (EditText) findViewById(R.id.txtBarcodeResult);
-                    if (content != "") {
+                    if (!content.equals("")) {
                         content = String.valueOf(Integer.parseInt(content));
                     }
                     editText.setText(content);
@@ -165,9 +165,8 @@ public class HomeActivity extends AppCompatActivity{
 
     public class DoDownload extends AsyncTask<Integer, Integer, JSONObject> {
 
-        ProgressDialog progressDialog = null;
-        Context context;
-
+        private ProgressDialog progressDialog = null;
+        private Context context;
 
         public DoDownload(Activity activity){
             progressDialog = new ProgressDialog(activity);
@@ -239,7 +238,7 @@ public class HomeActivity extends AppCompatActivity{
 
             try {
                 if (jsonObject != null) {
-                    if (jsonObject.getString("employee_name") != "" && jsonObject.getString("employee_name") != " "){
+                    if (jsonObject.getString("employee_name").equals("") && jsonObject.getString("employee_name").equals(" ")){
 
                         intent.putExtra("EMPLOYEE_NUMBER", jsonObject.getString("employee_number"));
                         intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
@@ -268,7 +267,7 @@ public class HomeActivity extends AppCompatActivity{
     }
 
     private String saveStringAsFile(String pictureString){
-        File photoFile = null;
+        File photoFile;
         String mDonwloadPicture;
 
         try {
