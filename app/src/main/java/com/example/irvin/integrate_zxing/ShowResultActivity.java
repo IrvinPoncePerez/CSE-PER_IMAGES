@@ -22,8 +22,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ShowResultActivity extends AppCompatActivity {
 
@@ -59,9 +67,9 @@ public class ShowResultActivity extends AppCompatActivity {
         lblEmployeeJob.setText(intent.getStringExtra("JOB"));
         this.mDonwloadPhotoPath = intent.getStringExtra("PICTURE");
 
-        if (mDonwloadPhotoPath != "") {
+        if (mDonwloadPhotoPath.equals("")) {
             Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(Uri.parse(mDonwloadPhotoPath), 100, 100);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(this.getResources(), bitmap);
             imgEmployeePicture.setImageDrawable(bitmapDrawable);
             //btnCameraCapture.setBackground(bitmapDrawable);
         }
@@ -121,7 +129,7 @@ public class ShowResultActivity extends AppCompatActivity {
                 Uri uri = data.getData();
 
                 Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(uri, 100, 100);
-                BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+                BitmapDrawable bitmapDrawable = new BitmapDrawable(this.getResources(), bitmap);
                 //ImageButton btnCameraPicture = (ImageButton)findViewById(R.id.btnCameraCapture);
                 //btnCameraPicture.setBackground(bitmapDrawable);
                 ImageView imgEmployeePicture = (ImageView)findViewById(R.id.imgEmployeePicture);
@@ -175,10 +183,12 @@ public class ShowResultActivity extends AppCompatActivity {
 
         ProgressDialog progressDialog = null;
         Context context;
+        DatabaseHandler db;
 
         public DoUpload(Activity activity){
             progressDialog = new ProgressDialog(activity);
             context = activity;
+            db = new DatabaseHandler(context);
         }
 
         @Override
@@ -195,10 +205,46 @@ public class ShowResultActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             Boolean result = false;
+            HttpURLConnection urlConnection;
+            JSONObject jsonObject = new JSONObject();
+            OutputStream outputStream;
+            int statusCode = 0;
+            URL url;
+
+            try {
+                jsonObject.put("employee_number", params[0]);
+                jsonObject.put("picture", ImageTool.convertImageToString(mCropCurrentPhotoPath));
+            } catch (JSONException e) {
+                Log.d("JSONException", e.getMessage());
+            }
+
+            String stringURL = "http://" + db.getSetting(DatabaseHandler.SETTING.SERVER_ADDRESS) +
+                    ":" + db.getSetting(DatabaseHandler.SETTING.PORT_NUMBER) +
+                    "/" + db.getSetting(DatabaseHandler.SETTING.SERVER_SERVLET) +
+                    "/PostPictureServlet";
+
+            try{
+                url = new URL(stringURL);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.connect();
+
+                outputStream = urlConnection.getOutputStream();
+                OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
+
+                writer.write(jsonObject.toString());
+                writer.flush();
+                writer.close();
+
+                statusCode = urlConnection.getResponseCode();
+            } catch (MalformedURLException e) {
+                Log.d("MalformedURLException", e.getMessage());
+            } catch (IOException e) {
+                Log.d("IOException", e.getMessage());
+            }
 
 
-
-            return true;
+            return statusCode == 200;
         }
 
         @Override
@@ -209,6 +255,8 @@ public class ShowResultActivity extends AppCompatActivity {
                Toast.makeText(context, getString(R.string.no_updated), Toast.LENGTH_SHORT);
            }
         }
+
+
     }
 
 }

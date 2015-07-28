@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -73,6 +75,16 @@ public class ImageTool {
 //        }
 
 //        return image;
+    }
+
+    public static String convertImageToString(String path){
+
+        Bitmap bitmap = decodeSampledBitmapFromFile(Uri.parse(path), 500, 500);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] bytes = stream.toByteArray();
+
+        return Base64.encodeToString(bytes, Base64.NO_WRAP);
     }
 
 }
