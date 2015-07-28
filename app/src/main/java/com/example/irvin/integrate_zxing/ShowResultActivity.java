@@ -69,7 +69,7 @@ public class ShowResultActivity extends AppCompatActivity {
 
         if (mDonwloadPhotoPath.equals("")) {
             Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(Uri.parse(mDonwloadPhotoPath), 100, 100);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(this.getResources(), bitmap);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
             imgEmployeePicture.setImageDrawable(bitmapDrawable);
             //btnCameraCapture.setBackground(bitmapDrawable);
         }
@@ -129,7 +129,7 @@ public class ShowResultActivity extends AppCompatActivity {
                 Uri uri = data.getData();
 
                 Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(uri, 100, 100);
-                BitmapDrawable bitmapDrawable = new BitmapDrawable(this.getResources(), bitmap);
+                BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
                 //ImageButton btnCameraPicture = (ImageButton)findViewById(R.id.btnCameraCapture);
                 //btnCameraPicture.setBackground(bitmapDrawable);
                 ImageView imgEmployeePicture = (ImageView)findViewById(R.id.imgEmployeePicture);
