@@ -249,10 +249,11 @@ public class ShowResultActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean value){
+            progressDialog.dismiss();
            if (value){
                ((ShowResultActivity)context).uploadFinish();
            } else {
-               Toast.makeText(context, getString(R.string.no_updated), Toast.LENGTH_SHORT);
+               Toast.makeText(context, getString(R.string.no_updated), Toast.LENGTH_SHORT).show();
            }
         }
 
