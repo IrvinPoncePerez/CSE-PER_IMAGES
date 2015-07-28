@@ -9,8 +9,13 @@
     <string name="servlet_server">Servlet Container</string>
     <string name="no_connectivity">No Connectivity</string>
     <string name="no_result">Don\'t result scanner</string>
-    <string name="wait_searching">Wait</string>
+    <string name="wait_title">Wait</string>
     <string name="searching">Searching...</string>
     <string name="setting_connection">Setting Connection</string>
     <string name="connecting">Connecting...</string>
+    <string name="not_found">Employee don\'t Found</string>
+    <string name="message_download">Buscando...</string>
+    <string name="upload_message">Actualizando...</string>
+    <string name="message_updated">Registro Actualizado</string>
+    <string name="no_updated">No Actualizado</string>
 </resources>

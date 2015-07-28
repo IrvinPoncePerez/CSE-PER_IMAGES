@@ -10,6 +10,6 @@
     <string name="server_Address">Dirección de Servidor</string>
     <string name="servlet_server">Contenedor de Servlets</string>
     <string name="setting_connection">Estableciendo Conexión</string>
-    <string name="wait_searching">Espere</string>
+    <string name="wait_title">Espere</string>
     <string name="text_hint"><font size="30">Número Aquí</font></string>
 </resources>

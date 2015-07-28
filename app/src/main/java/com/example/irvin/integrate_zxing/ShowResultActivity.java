@@ -1,33 +1,29 @@
 package com.example.irvin.integrate_zxing;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ShowResultActivity extends AppCompatActivity {
 
@@ -37,6 +33,7 @@ public class ShowResultActivity extends AppCompatActivity {
     String mCurrentPhotoPath;
     String mCropCurrentPhotoPath;
     String mDonwloadPhotoPath;
+    String mEmployeeNumber;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -44,14 +41,19 @@ public class ShowResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_result);
 
+        mDonwloadPhotoPath = null;
+        mCurrentPhotoPath = null;
+        mCropCurrentPhotoPath = null;
+        mEmployeeNumber = null;
         Intent intent = this.getIntent();
 
         TextView lblEmployeeName = (TextView)findViewById(R.id.lblEmployeeName);
         TextView lblEmployeeDepto = (TextView)findViewById(R.id.lblEmployeeDepto);
         TextView lblEmployeeJob = (TextView)findViewById(R.id.lblEmployeeJob);
-        ImageButton btnCameraCapture = (ImageButton)findViewById(R.id.btnCameraCapture);
+        ImageView imgEmployeePicture = (ImageView)findViewById(R.id.imgEmployeePicture);
 
         this.setTitle(intent.getStringExtra("EMPLOYEE_NUMBER"));
+        this.mEmployeeNumber = intent.getStringExtra("EMPLOYEE_NUMBER");
         lblEmployeeName.setText(intent.getStringExtra("EMPLOYEE_NAME"));
         lblEmployeeDepto.setText(intent.getStringExtra("DEPARTMENT"));
         lblEmployeeJob.setText(intent.getStringExtra("JOB"));
@@ -60,7 +62,8 @@ public class ShowResultActivity extends AppCompatActivity {
         if (mDonwloadPhotoPath != "") {
             Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(Uri.parse(mDonwloadPhotoPath), 100, 100);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-            btnCameraCapture.setBackground(bitmapDrawable);
+            imgEmployeePicture.setImageDrawable(bitmapDrawable);
+            //btnCameraCapture.setBackground(bitmapDrawable);
         }
 
     }
@@ -119,8 +122,10 @@ public class ShowResultActivity extends AppCompatActivity {
 
                 Bitmap bitmap = ImageTool.decodeSampledBitmapFromFile(uri, 100, 100);
                 BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-                ImageButton btnCameraPicture = (ImageButton)findViewById(R.id.btnCameraCapture);
-                btnCameraPicture.setBackground(bitmapDrawable);
+                //ImageButton btnCameraPicture = (ImageButton)findViewById(R.id.btnCameraCapture);
+                //btnCameraPicture.setBackground(bitmapDrawable);
+                ImageView imgEmployeePicture = (ImageView)findViewById(R.id.imgEmployeePicture);
+                imgEmployeePicture.setImageDrawable(bitmapDrawable);
 
 //                BitmapFactory.Options options = new BitmapFactory.Options();
 //                options.inJustDecodeBounds = true;
@@ -152,6 +157,58 @@ public class ShowResultActivity extends AppCompatActivity {
         }
     }
 
+    public void btnUpdatePicture_onClick(View view){
+        if (mCropCurrentPhotoPath != null){
+            new DoUpload(this).execute(mEmployeeNumber, mCropCurrentPhotoPath);
+        }
+    }
 
+    public void uploadFinish(){
+
+        this.setResult(Activity.RESULT_OK, null);
+        this.finish();
+
+    }
+
+
+    public class DoUpload extends AsyncTask<String, Integer, Boolean>{
+
+        ProgressDialog progressDialog = null;
+        Context context;
+
+        public DoUpload(Activity activity){
+            progressDialog = new ProgressDialog(activity);
+            context = activity;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+            progressDialog.setTitle(getResources().getString(R.string.wait_title));
+            progressDialog.setMessage(getString(R.string.upload_message));
+            progressDialog.setIndeterminate(false);
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            Boolean result = false;
+
+
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean value){
+           if (value){
+               ((ShowResultActivity)context).uploadFinish();
+           } else {
+               Toast.makeText(context, getString(R.string.no_updated), Toast.LENGTH_SHORT);
+           }
+        }
+    }
 
 }

@@ -11,5 +11,5 @@
     <string name="servlet_server">Servlet Container</string>
     <string name="setting_connection">Setting Connection</string>
     <string name="text_hint"><font size="30">Barcode Here</font></string>
-    <string name="wait_searching">Wait</string>
+    <string name="wait_title">Wait</string>
 </resources>

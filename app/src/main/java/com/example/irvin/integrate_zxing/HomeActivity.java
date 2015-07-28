@@ -37,6 +37,8 @@ import java.net.URL;
 public class HomeActivity extends AppCompatActivity{
 
     private static final int STATIC_SETTINGS_VALUE = 1;
+    private static final int SHOW_RESULT_ACTIVITY = 2;
+
     final Context context = this;
     DatabaseHandler db;
 
@@ -113,12 +115,20 @@ public class HomeActivity extends AppCompatActivity{
                 }
                 break;
             }
+            case (SHOW_RESULT_ACTIVITY):{
+                if(resultCode == Activity.RESULT_OK){
+                    EditText txt = (EditText)findViewById(R.id.txtBarcodeResult);
+                    Toast.makeText(this.getBaseContext(), getString(R.string.message_updated), Toast.LENGTH_SHORT).show();
+                    txt.setText("");
+                }
+                break;
+            }
             default: {
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
                 alertDialogBuilder.setTitle(getResources().getString(R.string.action_scanner));
-                String content = "0";
+                String content = "";
 
                 if (result != null) {
                     String contents = result.getContents();
@@ -143,7 +153,9 @@ public class HomeActivity extends AppCompatActivity{
                     }
 
                     EditText editText = (EditText) findViewById(R.id.txtBarcodeResult);
-                    content = String.valueOf(Integer.parseInt(content));
+                    if (content != "") {
+                        content = String.valueOf(Integer.parseInt(content));
+                    }
                     editText.setText(content);
                 }
             }
@@ -166,13 +178,11 @@ public class HomeActivity extends AppCompatActivity{
         protected void onPreExecute(){
             super.onPreExecute();
             Log.d("ON_PRE_EXECUTE", "SI");
-            progressDialog.setTitle(getResources().getString(R.string.wait_searching));
+            progressDialog.setTitle(getResources().getString(R.string.wait_title));
             progressDialog.setMessage(getResources().getString(R.string.searching));
             progressDialog.setIndeterminate(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
-
-            Toast.makeText(context, "Buscando...", Toast.LENGTH_SHORT);
         }
 
         @Override
@@ -227,22 +237,25 @@ public class HomeActivity extends AppCompatActivity{
             super.onPostExecute(jsonObject);
             Intent intent = new Intent(context, ShowResultActivity.class);
 
-            if (jsonObject != null) {
-                try {
+            try {
+                if (jsonObject != null) {
+                    if (jsonObject.getString("employee_name") != "" && jsonObject.getString("employee_name") != " "){
 
-                    intent.putExtra("EMPLOYEE_NUMBER", jsonObject.getString("employee_number"));
-                    intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
-                    intent.putExtra("DEPARTMENT", jsonObject.getString("department"));
-                    intent.putExtra("JOB", jsonObject.getString("job"));
-                    intent.putExtra("PICTURE", saveStringAsFile(jsonObject.getString("picture")));
+                        intent.putExtra("EMPLOYEE_NUMBER", jsonObject.getString("employee_number"));
+                        intent.putExtra("EMPLOYEE_NAME", jsonObject.getString("employee_name"));
+                        intent.putExtra("DEPARTMENT", jsonObject.getString("department"));
+                        intent.putExtra("JOB", jsonObject.getString("job"));
+                        intent.putExtra("PICTURE", saveStringAsFile(jsonObject.getString("picture")));
 
-                } catch (JSONException e) {
-                    Log.d("JSONException", e.getMessage());
+                        startActivityForResult(intent, SHOW_RESULT_ACTIVITY);
+                    } else {
+                        Toast.makeText(context, getString(R.string.not_found), Toast.LENGTH_SHORT);
+                    }
+                } else {
+                    Toast.makeText(context, getResources().getString(R.string.no_connectivity), Toast.LENGTH_SHORT).show();
                 }
-
-                startActivity(intent);
-            } else {
-                Toast.makeText(context, getResources().getString(R.string.no_connectivity), Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                Log.d("JSONException", e.getMessage());
             }
 
             if (progressDialog.isShowing()){
