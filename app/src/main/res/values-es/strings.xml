@@ -5,11 +5,18 @@
     <string name="connecting">Conectando...</string>
     <string name="no_connectivity">Sin Conectividad</string>
     <string name="no_result">Sin Resultado del Scaner</string>
-    <string name="port_Number">Número de Puerto</string>
+    <string name="port_number">Número de Puerto</string>
     <string name="searching">Buscando...</string>
-    <string name="server_Address">Dirección de Servidor</string>
+    <string name="server_address">Dirección de Servidor</string>
     <string name="servlet_server">Contenedor de Servlets</string>
     <string name="setting_connection">Estableciendo Conexión</string>
     <string name="wait_title">Espere</string>
     <string name="text_hint"><font size="30">Número Aquí</font></string>
+    <string name="app_name">El Calvario</string>
+    <string name="home_label">El Calvario</string>
+    <string name="message_download">Buscando...</string>
+    <string name="message_updated">Registro Actualizado</string>
+    <string name="no_updated">No Actualizado</string>
+    <string name="not_found">Empleado no Encontrado</string>
+    <string name="upload_message">Actualizando...</string>
 </resources>

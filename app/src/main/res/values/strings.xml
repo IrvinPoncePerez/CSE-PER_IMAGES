@@ -4,18 +4,18 @@
     <string name="action_scanner">Scanner</string>
     <string name="home_label">El Calvario</string>
     <string name="text_hint"><font size="30">Barcode Here</font></string>
-    <string name="server_Address">Server Address</string>
-    <string name="port_Number">Port Number</string>
+    <string name="server_address">Server Address</string>
+    <string name="port_number">Port Number</string>
     <string name="servlet_server">Servlet Container</string>
     <string name="no_connectivity">No Connectivity</string>
-    <string name="no_result">Don\'t result scanner</string>
+    <string name="no_result">Don\'t Result Scanner</string>
     <string name="wait_title">Wait</string>
     <string name="searching">Searching...</string>
     <string name="setting_connection">Setting Connection</string>
     <string name="connecting">Connecting...</string>
     <string name="not_found">Employee don\'t Found</string>
-    <string name="message_download">Buscando...</string>
-    <string name="upload_message">Actualizando...</string>
-    <string name="message_updated">Registro Actualizado</string>
-    <string name="no_updated">No Actualizado</string>
+    <string name="message_download">Searching...</string>
+    <string name="upload_message">Updating...</string>
+    <string name="message_updated">Updated</string>
+    <string name="no_updated">No Updated</string>
 </resources>
