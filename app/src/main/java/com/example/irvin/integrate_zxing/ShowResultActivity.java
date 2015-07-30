@@ -98,6 +98,20 @@ public class ShowResultActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        if (mDonwloadPhotoPath != null) {
+            new File(mDonwloadPhotoPath).delete();
+        }
+        if (mCurrentPhotoPath != null) {
+            new File(mCurrentPhotoPath).delete();
+        }
+        if (mCropCurrentPhotoPath != null) {
+            new File(mCropCurrentPhotoPath).delete();
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
